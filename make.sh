@@ -1,5 +1,5 @@
 #!/bin/sh
 
-git clone https://github.com/samkrew/libmbus.git libmbus
+git clone https://github.com/Apollon77/libmbus.git libmbus
 cd ./libmbus/
 ./build.sh && make
