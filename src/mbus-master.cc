@@ -316,7 +316,7 @@ class RecieveWorker : public Nan::AsyncWorker {
 
     Local<Value> argv[] = {
         Nan::Null(),
-        Nan::New<String>(data)
+        Nan::New<String>(data).ToLocalChecked()
     };
     free(data);
     callback->Call(2, argv);
@@ -490,7 +490,7 @@ NAN_METHOD(MbusMaster::ScanSecondary) {
   info.GetReturnValue().SetUndefined();
 }
 
-static inline Nan::Persistent<v8::Function> & constructor() {
+static inline Nan::Persistent<v8::Function> & MbusMaster::constructor() {
     static Nan::Persistent<v8::Function> my_constructor;
     return my_constructor;
   }
