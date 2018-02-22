@@ -355,7 +355,7 @@ NAN_METHOD(MbusMaster::Get) {
     };
     callback->Call(1, argv);
   }
-  Nan::ReturnUndefined();
+  info.GetReturnValue().SetUndefined();
 }
 
 class ScanSecondaryWorker : public Nan::AsyncWorker {
@@ -489,5 +489,5 @@ NAN_METHOD(MbusMaster::ScanSecondary) {
     };
     callback->Call(1, argv);
   }
-  Nan::ReturnUndefined();
+  info.GetReturnValue().SetUndefined();
 }
