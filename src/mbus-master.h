@@ -2,7 +2,6 @@
 #define MBUSMASTER_H
 
 #include <node.h>
-#include <nan.h>
 #include <mbus.h>
 #include <uv.h>
 
