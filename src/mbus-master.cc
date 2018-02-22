@@ -453,7 +453,7 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
 
     Local<Value> argv[] = {
         Nan::Null(),
-        Nan::New<String>(data)
+        Nan::New<String>(data).ToLocalChecked()
     };
     free(data);
     callback->Call(2, argv);
