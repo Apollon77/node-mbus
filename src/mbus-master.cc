@@ -24,7 +24,7 @@ MbusMaster::~MbusMaster(){
 }
 
 void MbusMaster::Init(Handle<Object> module) {
-  Nan::NanScope scope;
+  Nan::HandleScope scope;
 
   // Prepare constructor template
   Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
@@ -43,7 +43,7 @@ void MbusMaster::Init(Handle<Object> module) {
 }
 
 NAN_METHOD(MbusMaster::New) {
-  Nan::NanScope scope;
+  Nan::HandleScope scope;
 
   if (info.IsConstructCall()) {
     // Invoked as constructor: `new MbusMaster(...)`
@@ -60,7 +60,7 @@ NAN_METHOD(MbusMaster::New) {
 }
 
 NAN_METHOD(MbusMaster::OpenTCP) {
-  Nan::NanScope scope;
+  Nan::HandleScope scope;
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
 
@@ -94,7 +94,7 @@ NAN_METHOD(MbusMaster::OpenTCP) {
 }
 
 NAN_METHOD(MbusMaster::OpenSerial) {
-  Nan::NanScope scope;
+  Nan::HandleScope scope;
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
 
@@ -161,7 +161,7 @@ NAN_METHOD(MbusMaster::OpenSerial) {
 }
 
 NAN_METHOD(MbusMaster::Close) {
-    Nan::NanScope scope;
+    Nan::HandleScope scope;
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
 
@@ -314,7 +314,7 @@ class RecieveWorker : public NanAsyncWorker {
   // this function will be run inside the main event loop
   // so it is safe to use V8 again
   void HandleOKCallback () {
-      Nan::NanScope scope;
+      Nan::HandleScope scope;
 
     Local<Value> argv[] = {
         Nan::Null(),
@@ -325,7 +325,7 @@ class RecieveWorker : public NanAsyncWorker {
   };
 
   void HandleErrorCallback () {
-      Nan::NanScope scope;
+      Nan::HandleScope scope;
 
     Local<Value> argv[] = {
         Nan::Error(ErrorMessage())
@@ -341,7 +341,7 @@ class RecieveWorker : public NanAsyncWorker {
 };
 
 NAN_METHOD(MbusMaster::Get) {
-    Nan::NanScope scope;
+    Nan::HandleScope scope;
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
 
@@ -451,7 +451,7 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
   // this function will be run inside the main event loop
   // so it is safe to use V8 again
   void HandleOKCallback () {
-      Nan::NanScope scope;
+      Nan::HandleScope scope;
 
     Local<Value> argv[] = {
         Nan::Null(),
@@ -462,7 +462,7 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
   };
 
   void HandleErrorCallback () {
-      Nan::NanScope scope;
+      Nan::HandleScope scope;
 
     Local<Value> argv[] = {
         Nan::Error(ErrorMessage())
@@ -476,7 +476,7 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
 };
 
 NAN_METHOD(MbusMaster::ScanSecondary) {
-    Nan::NanScope scope;
+    Nan::HandleScope scope;
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
 
