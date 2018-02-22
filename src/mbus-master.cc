@@ -191,7 +191,7 @@ static int init_slaves(mbus_handle *handle)
     return 1;
 }
 
-class RecieveWorker : public NanAsyncWorker {
+class RecieveWorker : public Nan::AsyncWorker {
  public:
   RecieveWorker(Nan::Callback *callback,char *addr_str,uv_rwlock_t *lock, mbus_handle *handle)
     : Nan::AsyncWorker(callback), addr_str(addr_str), lock(lock), handle(handle) {}
