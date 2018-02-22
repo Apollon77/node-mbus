@@ -3,7 +3,6 @@
 #include <unistd.h>
 
 using namespace v8;
-using namespace Nan;
 
 Persistent<Function> MbusMaster::constructor;
 
@@ -25,11 +24,11 @@ MbusMaster::~MbusMaster(){
 }
 
 void MbusMaster::Init(Handle<Object> module) {
-  NanScope();
+  Nan::Scope();
 
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
-  tpl->SetClassName(NanNew("MbusMaster"));
+  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
+  tpl->SetClassName(Nan::New("MbusMaster"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
@@ -39,29 +38,29 @@ void MbusMaster::Init(Handle<Object> module) {
   NODE_SET_PROTOTYPE_METHOD(tpl, "get", Get);
   NODE_SET_PROTOTYPE_METHOD(tpl, "scan", ScanSecondary);
 
-  NanAssignPersistent(constructor, tpl->GetFunction());
-  module->Set(NanNew<String>("exports"), tpl->GetFunction());
+  Nan::AssignPersistent(constructor, tpl->GetFunction());
+  module->Set(Nan::New<String>("exports"), tpl->GetFunction());
 }
 
 NAN_METHOD(MbusMaster::New) {
-  NanScope();
+  Nan::Scope();
 
   if (args.IsConstructCall()) {
     // Invoked as constructor: `new MbusMaster(...)`
     MbusMaster* obj = new MbusMaster();
     obj->Wrap(args.This());
-    NanReturnValue(args.This());
+    Nan::ReturnValue(args.This());
   } else {
     // Invoked as plain function `MbusMaster(...)`, turn into construct call.
     const int argc = 1;
     Local<Value> argv[argc] = { args[0] };
-    Local<Function> cons = NanNew<Function>(constructor);
-    NanReturnValue(cons->NewInstance(argc, argv));
+    Local<Function> cons = Nan::New<Function>(constructor);
+    Nan::ReturnValue(cons->NewInstance(argc, argv));
   }
 }
 
 NAN_METHOD(MbusMaster::OpenTCP) {
-  NanScope();
+  Nan::Scope();
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
 
@@ -74,28 +73,28 @@ NAN_METHOD(MbusMaster::OpenTCP) {
     if ((port < 0) || (port > 0xFFFF))
     {
         free(host);
-        NanReturnValue(NanFalse());
+        Nan::ReturnValue(Nan::False());
     }
     if (!(obj->handle = mbus_context_tcp(host,port)))
     {
         free(host);
-        NanReturnValue(NanFalse());
+        Nan::ReturnValue(Nan::False());
     }
     free(host);
     if (mbus_connect(obj->handle) == -1)
     {
       mbus_context_free(obj->handle);
       obj->handle = NULL;
-      NanReturnValue(NanFalse());
+      Nan::ReturnValue(Nan::False());
     }
     obj->connected = true;
-    NanReturnValue(NanTrue());
+    Nan::ReturnValue(Nan::True());
   }
-  NanReturnValue(NanFalse());
+  Nan::ReturnValue(Nan::False());
 }
 
 NAN_METHOD(MbusMaster::OpenSerial) {
-  NanScope();
+  Nan::Scope();
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
 
@@ -139,30 +138,30 @@ NAN_METHOD(MbusMaster::OpenSerial) {
     if (!(obj->handle = mbus_context_serial(port)))
     {
         free(port);
-        NanReturnValue(NanFalse());
+        Nan::ReturnValue(Nan::False());
     }
     free(port);
     if (mbus_connect(obj->handle) == -1)
     {
       mbus_context_free(obj->handle);
       obj->handle = NULL;
-      NanReturnValue(NanFalse());
+      Nan::ReturnValue(Nan::False());
     }
     if (mbus_serial_set_baudrate(obj->handle, boudrate) == -1)
     {
         mbus_disconnect(obj->handle);
         mbus_context_free(obj->handle);
         obj->handle = NULL;
-        NanReturnValue(NanFalse());
+        Nan::ReturnValue(Nan::False());
     }
     obj->connected = true;
-    NanReturnValue(NanTrue());
+    Nan::ReturnValue(Nan::True());
   }
-  NanReturnValue(NanFalse());
+  Nan::ReturnValue(Nan::False());
 }
 
 NAN_METHOD(MbusMaster::Close) {
-  NanScope();
+  Nan::Scope();
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
 
@@ -171,9 +170,9 @@ NAN_METHOD(MbusMaster::Close) {
     mbus_context_free(obj->handle);
     obj->handle = NULL;
     obj->connected = false;
-    NanReturnValue(NanTrue());
+    Nan::ReturnValue(Nan::True());
   }
-  NanReturnValue(NanFalse());
+  Nan::ReturnValue(Nan::False());
 }
 
 static int init_slaves(mbus_handle *handle)
@@ -194,8 +193,8 @@ static int init_slaves(mbus_handle *handle)
 
 class RecieveWorker : public NanAsyncWorker {
  public:
-  RecieveWorker(NanCallback *callback,char *addr_str,uv_rwlock_t *lock, mbus_handle *handle)
-    : NanAsyncWorker(callback), addr_str(addr_str), lock(lock), handle(handle) {}
+  RecieveWorker(Nan::Callback *callback,char *addr_str,uv_rwlock_t *lock, mbus_handle *handle)
+    : Nan::AsyncWorker(callback), addr_str(addr_str), lock(lock), handle(handle) {}
   ~RecieveWorker() {
     free(addr_str);
   }
@@ -315,20 +314,20 @@ class RecieveWorker : public NanAsyncWorker {
   // this function will be run inside the main event loop
   // so it is safe to use V8 again
   void HandleOKCallback () {
-    NanScope();
+    Nan::Scope();
 
     Local<Value> argv[] = {
-        NanNull(),
-        NanNew<String>(data)
+        Nan::Null(),
+        Nan::New<String>(data)
     };
     free(data);
     callback->Call(2, argv);
   };
   void HandleErrorCallback () {
-    NanScope();
+    Nan::Scope();
 
     Local<Value> argv[] = {
-        NanError(ErrorMessage())
+        Nan::Error(ErrorMessage())
     };
 
     callback->Call(1, argv);
@@ -341,27 +340,27 @@ class RecieveWorker : public NanAsyncWorker {
 };
 
 NAN_METHOD(MbusMaster::Get) {
-  NanScope();
+  Nan::Scope();
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
 
   char *address = get(args[0]->ToString(),"0");
-  NanCallback *callback = new NanCallback(args[1].As<Function>());
+  Nan::Callback *callback = new Nan::Callback(args[1].As<Function>());
   if(obj->connected) {
-    NanAsyncQueueWorker(new RecieveWorker(callback, address, &(obj->queueLock), obj->handle));
+    Nan::AsyncQueueWorker(new RecieveWorker(callback, address, &(obj->queueLock), obj->handle));
   } else {
     Local<Value> argv[] = {
-        NanError("Not connected to port")
+        Nan::Error("Not connected to port")
     };
     callback->Call(1, argv);
   }
-  NanReturnUndefined();
+  Nan::ReturnUndefined();
 }
 
-class ScanSecondaryWorker : public NanAsyncWorker {
+class ScanSecondaryWorker : public Nan::AsyncWorker {
  public:
-  ScanSecondaryWorker(NanCallback *callback,uv_rwlock_t *lock, mbus_handle *handle)
-    : NanAsyncWorker(callback), lock(lock), handle(handle) {}
+  ScanSecondaryWorker(Nan::Callback *callback,uv_rwlock_t *lock, mbus_handle *handle)
+    : Nan::AsyncWorker(callback), lock(lock), handle(handle) {}
   ~ScanSecondaryWorker() {
   }
 
@@ -451,20 +450,20 @@ class ScanSecondaryWorker : public NanAsyncWorker {
   // this function will be run inside the main event loop
   // so it is safe to use V8 again
   void HandleOKCallback () {
-    NanScope();
+    Nan::Scope();
 
     Local<Value> argv[] = {
-        NanNull(),
-        NanNew<String>(data)
+        Nan::Null(),
+        Nan::New<String>(data)
     };
     free(data);
     callback->Call(2, argv);
   };
   void HandleErrorCallback () {
-    NanScope();
+    Nan::Scope();
 
     Local<Value> argv[] = {
-        NanError(ErrorMessage())
+        Nan::Error(ErrorMessage())
     };
     callback->Call(1, argv);
   }
@@ -475,18 +474,18 @@ class ScanSecondaryWorker : public NanAsyncWorker {
 };
 
 NAN_METHOD(MbusMaster::ScanSecondary) {
-  NanScope();
+  Nan::Scope();
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
 
-  NanCallback *callback = new NanCallback(args[0].As<Function>());
+  Nan::Callback *callback = new Nan::Callback(args[0].As<Function>());
   if(obj->connected) {
-    NanAsyncQueueWorker(new ScanSecondaryWorker(callback, &(obj->queueLock), obj->handle));
+    Nan::AsyncQueueWorker(new ScanSecondaryWorker(callback, &(obj->queueLock), obj->handle));
   } else {
     Local<Value> argv[] = {
-        NanError("Not connected to port")
+        Nan::Error("Not connected to port")
     };
     callback->Call(1, argv);
   }
-  NanReturnUndefined();
+  Nan::ReturnUndefined();
 }
