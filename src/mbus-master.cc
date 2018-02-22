@@ -3,20 +3,7 @@
 #include <unistd.h>
 
 using namespace v8;
-
-using Nan::NanScope;
-using Nan::NanNew;
-using Nan::NanAssignPersistent;
-using Nan::NanReturnValue;
-using Nan::NanFalse;
-using Nan::NanTrue;
-using Nan::NanReturnValue;
-using Nan::SetErrorMessage;
-using Nan::NanNull;
-using Nan::NanCallback;
-using Nan::NanReturnUndefined;
-using Nan::NanError;
-using Nan::NanAsyncQueueWorker;
+using namespace Nan;
 
 Persistent<Function> MbusMaster::constructor;
 
