@@ -45,27 +45,27 @@ void MbusMaster::Init(Handle<Object> module) {
 NAN_METHOD(MbusMaster::New) {
   Nan::NanScope scope;
 
-  if (args.IsConstructCall()) {
+  if (info.IsConstructCall()) {
     // Invoked as constructor: `new MbusMaster(...)`
     MbusMaster* obj = new MbusMaster();
-    obj->Wrap(args.This());
-    Nan::ReturnValue(args.This());
+    obj->Wrap(info.This());
+    info.GetReturnValue().Set(info.This());
   } else {
     // Invoked as plain function `MbusMaster(...)`, turn into construct call.
     const int argc = 1;
-    Local<Value> argv[argc] = { args[0] };
+    Local<Value> argv[argc] = { info[0] };
     Local<Function> cons = Nan::New<Function>(constructor);
-    Nan::ReturnValue(cons->NewInstance(argc, argv));
+    info.GetReturnValue().Set(cons->NewInstance(argc, argv));
   }
 }
 
 NAN_METHOD(MbusMaster::OpenTCP) {
   Nan::NanScope scope;
 
-  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
+  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
 
-  int port = (long)args[1]->IntegerValue();
-  char *host = get(args[0]->ToString(), "127.0.0.1");
+  int port = (long)info[1]->IntegerValue();
+  char *host = get(info[0]->ToString(), "127.0.0.1");
 
   obj->serial = false;
 
@@ -73,34 +73,34 @@ NAN_METHOD(MbusMaster::OpenTCP) {
     if ((port < 0) || (port > 0xFFFF))
     {
         free(host);
-        Nan::ReturnValue(Nan::False());
+        info.GetReturnValue().Set(Nan::False());
     }
     if (!(obj->handle = mbus_context_tcp(host,port)))
     {
         free(host);
-        Nan::ReturnValue(Nan::False());
+        info.GetReturnValue().Set(Nan::False());
     }
     free(host);
     if (mbus_connect(obj->handle) == -1)
     {
       mbus_context_free(obj->handle);
       obj->handle = NULL;
-      Nan::ReturnValue(Nan::False());
+      info.GetReturnValue().Set(Nan::False());
     }
     obj->connected = true;
-    Nan::ReturnValue(Nan::True());
+    info.GetReturnValue().Set(Nan::True());
   }
-  Nan::ReturnValue(Nan::False());
+  info.GetReturnValue().Set(Nan::False());
 }
 
 NAN_METHOD(MbusMaster::OpenSerial) {
   Nan::NanScope scope;
 
-  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
+  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
 
   long boudrate;
-  int _boudrate = args[1]->IntegerValue();
-  char *port = get(args[0]->ToString(), "/dev/ttyS0");
+  int _boudrate = info[1]->IntegerValue();
+  char *port = get(info[0]->ToString(), "/dev/ttyS0");
 
   obj->serial = true;
 
@@ -138,41 +138,41 @@ NAN_METHOD(MbusMaster::OpenSerial) {
     if (!(obj->handle = mbus_context_serial(port)))
     {
         free(port);
-        Nan::ReturnValue(Nan::False());
+        info.GetReturnValue().Set(Nan::False());
     }
     free(port);
     if (mbus_connect(obj->handle) == -1)
     {
       mbus_context_free(obj->handle);
       obj->handle = NULL;
-      Nan::ReturnValue(Nan::False());
+      info.GetReturnValue().Set(Nan::False());
     }
     if (mbus_serial_set_baudrate(obj->handle, boudrate) == -1)
     {
         mbus_disconnect(obj->handle);
         mbus_context_free(obj->handle);
         obj->handle = NULL;
-        Nan::ReturnValue(Nan::False());
+        info.GetReturnValue().Set(Nan::False());
     }
     obj->connected = true;
-    Nan::ReturnValue(Nan::True());
+    info.GetReturnValue().Set(Nan::True());
   }
-  Nan::ReturnValue(Nan::False());
+  info.GetReturnValue().Set(Nan::False());
 }
 
 NAN_METHOD(MbusMaster::Close) {
     Nan::NanScope scope;
 
-  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
+  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
 
   if(obj->connected) {
     mbus_disconnect(obj->handle);
     mbus_context_free(obj->handle);
     obj->handle = NULL;
     obj->connected = false;
-    Nan::ReturnValue(Nan::True());
+    info.GetReturnValue().Set(Nan::True());
   }
-  Nan::ReturnValue(Nan::False());
+  info.GetReturnValue().Set(Nan::False());
 }
 
 static int init_slaves(mbus_handle *handle)
@@ -343,10 +343,10 @@ class RecieveWorker : public NanAsyncWorker {
 NAN_METHOD(MbusMaster::Get) {
     Nan::NanScope scope;
 
-  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
+  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
 
-  char *address = get(args[0]->ToString(),"0");
-  Nan::Callback *callback = new Nan::Callback(args[1].As<Function>());
+  char *address = get(info[0]->ToString(),"0");
+  Nan::Callback *callback = new Nan::Callback(info[1].As<Function>());
   if(obj->connected) {
     Nan::AsyncQueueWorker(new RecieveWorker(callback, address, &(obj->queueLock), obj->handle));
   } else {
@@ -478,9 +478,9 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
 NAN_METHOD(MbusMaster::ScanSecondary) {
     Nan::NanScope scope;
 
-  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
+  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
 
-  Nan::Callback *callback = new Nan::Callback(args[0].As<Function>());
+  Nan::Callback *callback = new Nan::Callback(info[0].As<Function>());
   if(obj->connected) {
     Nan::AsyncQueueWorker(new ScanSecondaryWorker(callback, &(obj->queueLock), obj->handle));
   } else {
