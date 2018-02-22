@@ -6,7 +6,7 @@
 					{
 						'target_name': 'mbus',
 						'cflags': [
-							'-Wall'
+							'-Wall -fPIC'
 						],
 						'ldflags': [
 							'../libmbus/mbus/mbus-protocol-aux.o',
@@ -34,7 +34,7 @@
 					{
 						'target_name': 'mbus',
 						'cflags': [
-							'-Wall'
+							'-Wall -fPIC'
 						],
 						'include_dirs': [
 							'./libmbus/mbus',
