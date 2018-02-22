@@ -490,7 +490,7 @@ NAN_METHOD(MbusMaster::ScanSecondary) {
   info.GetReturnValue().SetUndefined();
 }
 
-static inline Nan::Persistent<v8::Function> & MbusMaster::constructor() {
+Nan::Persistent<v8::Function> & MbusMaster::constructor() {
     static Nan::Persistent<v8::Function> my_constructor;
     return my_constructor;
   }
