@@ -3,7 +3,8 @@
 #include <cstring>
 
 char *get(v8::Handle<v8::Value> value, const char *fallback) {
-	Nan::NanScope();
+	Nan::HandleScope scope;
+    
 	char *str;
     if (value->IsString()) {
         Nan::Utf8String string(value);

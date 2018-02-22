@@ -4,8 +4,6 @@
 
 using namespace v8;
 
-Persistent<Function> MbusMaster::constructor;
-
 MbusMaster::MbusMaster() {
   connected = false;
   serial = true;
@@ -38,7 +36,7 @@ void MbusMaster::Init(Handle<Object> module) {
   Nan::SetPrototypeMethod(tpl, "get", Get);
   Nan::SetPrototypeMethod(tpl, "scan", ScanSecondary);
 
-  Nan::AssignPersistent(constructor, tpl->GetFunction());
+  constructor().Reset(Nan::GetFunction(tpl).ToLocalChecked());
   module->Set(Nan::New<String>("exports"), tpl->GetFunction());
 }
 
@@ -54,7 +52,7 @@ NAN_METHOD(MbusMaster::New) {
     // Invoked as plain function `MbusMaster(...)`, turn into construct call.
     const int argc = 1;
     Local<Value> argv[argc] = { info[0] };
-    Local<Function> cons = Nan::New<Function>(constructor);
+    Local<Function> cons = Nan::New(constructor());
     info.GetReturnValue().Set(cons->NewInstance(argc, argv));
   }
 }
@@ -491,3 +489,8 @@ NAN_METHOD(MbusMaster::ScanSecondary) {
   }
   info.GetReturnValue().SetUndefined();
 }
+
+static inline Nan::Persistent<v8::Function> & constructor() {
+    static Nan::Persistent<v8::Function> my_constructor;
+    return my_constructor;
+  }
