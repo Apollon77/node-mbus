@@ -1,6 +1,7 @@
 #include "mbus-master.h"
 #include "util.h"
 #include <unistd.h>
+#include <nan.h>
 
 using namespace v8;
 
@@ -213,7 +214,7 @@ class RecieveWorker : public NanAsyncWorker {
 
     memset((void *)&reply, 0, sizeof(mbus_frame));
     memset((void *)&reply_data, 0, sizeof(mbus_frame_data));
-    
+
     if (init_slaves(handle) == 0)
     {
         mbus_disconnect(handle);
@@ -254,7 +255,7 @@ class RecieveWorker : public NanAsyncWorker {
             return;
         }
         // else MBUS_PROBE_SINGLE
-        
+
         address = MBUS_ADDRESS_NETWORK_LAYER;
     }
     else
