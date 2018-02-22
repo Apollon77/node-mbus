@@ -37,7 +37,7 @@ void MbusMaster::Init(Handle<Object> module) {
   Nan::SetPrototypeMethod(tpl, "scan", ScanSecondary);
 
   constructor().Reset(Nan::GetFunction(tpl).ToLocalChecked());
-  module->Set(Nan::NanSymbol("exports"), tpl->GetFunction());
+  module->Set(Nan::New("exports").ToLocalChecked(), tpl->GetFunction());
 }
 
 NAN_METHOD(MbusMaster::New) {
