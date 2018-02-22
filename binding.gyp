@@ -17,6 +17,7 @@
 						],
 						'include_dirs': [
 							'../libmbus/mbus',
+							'./libmbus/mbus',
 							"<!(node -e \"require('nan')\")"
 						],
 						'sources': [
