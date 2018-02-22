@@ -20,7 +20,7 @@ class MbusMaster : public node::ObjectWrap {
   static NAN_METHOD(Close);
   static NAN_METHOD(ScanSecondary);
   static NAN_METHOD(Get);
-  static inline Nan::Persistent<v8::Function> & constructor()
+  static inline Nan::Persistent<v8::Function> & constructor();
   mbus_handle *handle;
   bool connected;
   uv_rwlock_t queueLock;
