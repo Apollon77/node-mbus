@@ -24,7 +24,7 @@ MbusMaster::~MbusMaster(){
 }
 
 void MbusMaster::Init(Handle<Object> module) {
-  Nan::Scope();
+  Nan::NanScope scope;
 
   // Prepare constructor template
   Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
@@ -43,7 +43,7 @@ void MbusMaster::Init(Handle<Object> module) {
 }
 
 NAN_METHOD(MbusMaster::New) {
-  Nan::Scope();
+  Nan::NanScope scope;
 
   if (args.IsConstructCall()) {
     // Invoked as constructor: `new MbusMaster(...)`
@@ -60,7 +60,7 @@ NAN_METHOD(MbusMaster::New) {
 }
 
 NAN_METHOD(MbusMaster::OpenTCP) {
-  Nan::Scope();
+  Nan::NanScope scope;
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
 
@@ -94,7 +94,7 @@ NAN_METHOD(MbusMaster::OpenTCP) {
 }
 
 NAN_METHOD(MbusMaster::OpenSerial) {
-  Nan::Scope();
+  Nan::NanScope scope;
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
 
@@ -161,7 +161,7 @@ NAN_METHOD(MbusMaster::OpenSerial) {
 }
 
 NAN_METHOD(MbusMaster::Close) {
-  Nan::Scope();
+    Nan::NanScope scope;
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
 
@@ -314,7 +314,7 @@ class RecieveWorker : public NanAsyncWorker {
   // this function will be run inside the main event loop
   // so it is safe to use V8 again
   void HandleOKCallback () {
-    Nan::Scope();
+      Nan::NanScope scope;
 
     Local<Value> argv[] = {
         Nan::Null(),
@@ -323,8 +323,9 @@ class RecieveWorker : public NanAsyncWorker {
     free(data);
     callback->Call(2, argv);
   };
+
   void HandleErrorCallback () {
-    Nan::Scope();
+      Nan::NanScope scope;
 
     Local<Value> argv[] = {
         Nan::Error(ErrorMessage())
@@ -340,7 +341,7 @@ class RecieveWorker : public NanAsyncWorker {
 };
 
 NAN_METHOD(MbusMaster::Get) {
-  Nan::Scope();
+    Nan::NanScope scope;
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
 
@@ -450,7 +451,7 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
   // this function will be run inside the main event loop
   // so it is safe to use V8 again
   void HandleOKCallback () {
-    Nan::Scope();
+      Nan::NanScope scope;
 
     Local<Value> argv[] = {
         Nan::Null(),
@@ -459,8 +460,9 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
     free(data);
     callback->Call(2, argv);
   };
+
   void HandleErrorCallback () {
-    Nan::Scope();
+      Nan::NanScope scope;
 
     Local<Value> argv[] = {
         Nan::Error(ErrorMessage())
@@ -474,7 +476,7 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
 };
 
 NAN_METHOD(MbusMaster::ScanSecondary) {
-  Nan::Scope();
+    Nan::NanScope scope;
 
   MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(args.Holder());
 
