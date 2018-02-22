@@ -1,7 +1,6 @@
 #include "mbus-master.h"
 #include "util.h"
 #include <unistd.h>
-#include <nan.h>
 
 using namespace v8;
 

@@ -4,6 +4,7 @@
 #include <node.h>
 #include <mbus.h>
 #include <uv.h>
+#include <nan.h>
 
 class MbusMaster : public node::ObjectWrap {
  public:
