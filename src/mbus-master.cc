@@ -28,7 +28,7 @@ void MbusMaster::Init(Handle<Object> module) {
 
   // Prepare constructor template
   Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
-  tpl->SetClassName(Nan::New("MbusMaster"));
+  tpl->SetClassName(Nan::New("MbusMaster").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
