@@ -32,11 +32,11 @@ void MbusMaster::Init(Handle<Object> module) {
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
-  NODE_SET_PROTOTYPE_METHOD(tpl, "openSerial", OpenSerial);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "openTCP", OpenTCP);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "close", Close);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "get", Get);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "scan", ScanSecondary);
+  Nan::SetPrototypeMethod(tpl, "openSerial", OpenSerial);
+  Nan::SetPrototypeMethod(tpl, "openTCP", OpenTCP);
+  Nan::SetPrototypeMethod(tpl, "close", Close);
+  Nan::SetPrototypeMethod(tpl, "get", Get);
+  Nan::SetPrototypeMethod(tpl, "scan", ScanSecondary);
 
   Nan::AssignPersistent(constructor, tpl->GetFunction());
   module->Set(Nan::New<String>("exports"), tpl->GetFunction());
