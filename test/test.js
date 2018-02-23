@@ -35,7 +35,7 @@ tcpClient.connect(port, '127.0.0.1', function() {
 
 var mbus = require('bindings')('mbus')();
 //console.log('Open:',mbus.openSerial('/dev/pts/5',2400));
-console.log('Open:',mbus.openTcp('127.0.0.1', port));
+console.log('Open:',mbus.openTCP('127.0.0.1', port));
 
 mbus.get(1,function(err,data){
 	console.log('1:',err,data);
