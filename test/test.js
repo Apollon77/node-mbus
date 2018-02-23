@@ -12,8 +12,8 @@ var server = net.createServer(function(socket) {
             console.log('Received empty string!');
             return;
         }
-        console.log('Received ' + data);
-        lastMessage = data;
+        console.log('Received ' + data.toString('hex'));
+        lastMessage = data.toString('hex');
 
         var sendBuf = Buffer.from('683C3C680808727803491177040E16290000000C7878034911041331D40000426C0000441300000000046D1D0D98110227000009FD0E0209FD0F060F00008F13E816', 'hex');
         sendMessage(sendBuf);
