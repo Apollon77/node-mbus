@@ -55,6 +55,7 @@ server.listen(port, '127.0.0.1');
 function sendMessage(socket, message, callback) {
     console.log(new Date().toString() + ':     mbus-TCP-Device: Send to Master: ' + message.toString('hex'));
     socket.write(message, function(err) {
+        console.log(new Date().toString() + ':         mbus-TCP-Device: Send done');
         callback && callback(err);
     });
 }
