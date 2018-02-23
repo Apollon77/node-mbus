@@ -37,8 +37,8 @@ server.on('listening', function() {
 server.listen(port, '127.0.0.1');
 
 
-function sendMessage(message, callback) {
-    tcpClient.write(message, function(err) {
+function sendMessage(socket, message, callback) {
+    socket.write(message, function(err) {
         callback && callback(err);
     });
 }
