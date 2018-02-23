@@ -14,12 +14,20 @@ var server = net.createServer(function(socket) {
             console.log(new Date().toString() + ': mbus-TCP-Device: Received empty string!');
             return;
         }
-        console.log(new Date().toString() + ': mbus-TCP-Device: Received from Master: ' + data.toString('hex'));
+        var hexData = data.toString('hex');
+        console.log(new Date().toString() + ': mbus-TCP-Device: Received from Master: ' + hexData);
 
-        var sendBuf = Buffer.from('683C3C680808727803491177040E16290000000C7878034911041331D40000426C0000441300000000046D1D0D98110227000009FD0E0209FD0F060F00008F13E816', 'hex');
-        if (lastMessage !== data.toString('hex')) sendMessage(socket, sendBuf);
-
-        lastMessage = data.toString('hex');
+        if (hexData.substring(0,4) === '1040') {
+            console.log(new Date().toString() + ':     mbus-TCP-Device: Initialization Request');
+            var sendBuf = Buffer.from('5E', 'hex');
+            sendMessage(socket, sendBuf);
+        }
+        else if (hexData.substring(0,4) === '105b') {
+            console.log(new Date().toString() + ':     mbus-TCP-Device: Request for Class 2 Data');
+            var sendBuf = Buffer.from('683C3C680808727803491177040E16290000000C7878034911041331D40000426C0000441300000000046D1D0D98110227000009FD0E0209FD0F060F00008F13E816', 'hex');
+            sendMessage(socket, sendBuf);
+        }
+        lastMessage = hexData;
     });
     socket.on('error', function (err) {
         console.error(new Date().toString() + ': mbus-TCP-Device: Error: ' + err);
