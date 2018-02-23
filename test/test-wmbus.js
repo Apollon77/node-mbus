@@ -44,5 +44,12 @@ console.log();
 console.log();
 console.log('WM-Bus Library test ...');
 
+var buf = Buffer.from('683C3C680808727803491177040E16290000000C7878034911041331D40000426C0000441300000000046D1D0D98110227000009FD0E0209FD0F060F00008F13E816','hex');
+wmbus.parse(buf.toString());
 
-wmbus.parseMBus('683C3C680808727803491177040E16290000000C7878034911041331D40000426C0000441300000000046D1D0D98110227000009FD0E0209FD0F060F00008F13E816');
+
+console.log();
+console.log();
+console.log();
+console.log('WM-Bus Library test mbus...');
+wmbus.parseMBus(buf.toString());
