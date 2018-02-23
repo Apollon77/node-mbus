@@ -9,7 +9,7 @@ var config = [
 
 WMBUS.prototype.updateStates = function(){
     if (this.errorcode !== this.cc.ERR_NO_ERROR) {
-        adapter.log.error("Error Code: " + this.errorcode + " " + this.errormsg);
+        console.log("Error Code: " + this.errorcode + " " + this.errormsg);
         return;
     }
     console.log('name: ' + this.manufacturer + '-' + this.afield_id);
