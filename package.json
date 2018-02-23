@@ -12,7 +12,8 @@
   "scripts": {
     "preinstall":"./make.sh",
     "install": "node-gyp configure && node-gyp build",
-    "preuninstall": "rm -rf libmbus build"
+    "preuninstall": "rm -rf libmbus build",
+    "test": "node test/test.js"
   },
   "author": {
     "name": "Semen Krivosheev",
