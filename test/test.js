@@ -38,7 +38,7 @@ server.listen(port, '127.0.0.1');
 
 
 function sendMessage(socket, message, callback) {
-    console.log('mbus-TCP-Device: Send to Master: ' + sendBuf.toString('hex'));
+    console.log('mbus-TCP-Device: Send to Master: ' + message.toString('hex'));
     socket.write(message, function(err) {
         callback && callback(err);
     });
