@@ -72,4 +72,4 @@ mbus.get(21,function(err,data){
 //console.log('Close:',mbus.close());
 //socat tcp-l:54321,reuseaddr,fork file:/dev/ttyS0,nonblock,waitlock=/var/run/ttyS0.lock,b2400
 
-tcpClient.destroy();
+server.close();
