@@ -6,7 +6,7 @@
 					{
 						'target_name': 'mbus',
 						'cflags': [
-							'-Wall -fPIC'
+							'-Wall'
 						],
 						'ldflags': [
 							'../libmbus/mbus/mbus-protocol-aux.o',
@@ -16,7 +16,6 @@
 							'../libmbus/mbus/mbus.o'
 						],
 						'include_dirs': [
-							'../libmbus/mbus',
 							'./libmbus/mbus',
 							"<!(node -e \"require('nan')\")"
 						],
@@ -34,7 +33,7 @@
 					{
 						'target_name': 'mbus',
 						'cflags': [
-							'-Wall -fPIC'
+							'-Wall'
 						],
 						'include_dirs': [
 							'./libmbus/mbus',
