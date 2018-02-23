@@ -13,7 +13,7 @@
     "preinstall":"./make.sh",
     "install": "node-gyp configure && node-gyp build",
     "preuninstall": "rm -rf libmbus build",
-    "test": "node test/test.js"
+    "test": "node test/test.js && node test/test-wmbus.js"
   },
   "author": {
     "name": "Semen Krivosheev",

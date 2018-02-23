@@ -1,7 +1,7 @@
 var net    = require('net');
 
 var port        = 15000;
-var lastMessage;
+var lastMessage = null;
 
 
 var server = net.createServer(function(socket) {
@@ -13,10 +13,11 @@ var server = net.createServer(function(socket) {
             return;
         }
         console.log('mbus-TCP-Device: Received from Master: ' + data.toString('hex'));
-        lastMessage = data.toString('hex');
 
         var sendBuf = Buffer.from('683C3C680808727803491177040E16290000000C7878034911041331D40000426C0000441300000000046D1D0D98110227000009FD0E0209FD0F060F00008F13E816', 'hex');
-        sendMessage(socket, sendBuf);
+        if (lastMessage !== data.toString('hex')) sendMessage(socket, sendBuf);
+
+        lastMessage = data.toString('hex');
     });
     socket.on('error', function (err) {
         console.error('mbus-TCP-Device: Error: ' + err);
