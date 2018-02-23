@@ -48,7 +48,7 @@ function test() {
     //console.log('Open:',mbus.openSerial('/dev/pts/5',2400));
     console.log('Open:',mbus.openTCP('127.0.0.1', port));
 
-    mbus.get(1,function(err,data){
+    /*mbus.get(1,function(err,data){
     	console.log('1:',err,data);
     });
     mbus.get(21,function(err,data){
@@ -71,9 +71,12 @@ function test() {
     });
     mbus.get(21,function(err,data){
     	console.log('8:',err,data);
-    });
-    //console.log('Close:',mbus.close());
+    });*/
+    setTimeout(function() {
+        console.log('Close:',mbus.close());
+        server.close();
+
+    }, 5000);
     //socat tcp-l:54321,reuseaddr,fork file:/dev/ttyS0,nonblock,waitlock=/var/run/ttyS0.lock,b2400
 
-    server.close();
 }
