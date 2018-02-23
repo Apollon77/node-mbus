@@ -1,9 +1,11 @@
 var WMBUS = require('wm-bus').WMBUS;
 
+/*
 var config = [
     { manufacturerId: '60092596', aesKey: '1212121212121212'},
     { manufacturerId: '60092599', aesKey: '3434343434343434'}
 ];
+*/
 
 WMBUS.prototype.updateStates = function(){
     if (this.errorcode !== this.cc.ERR_NO_ERROR) {
@@ -31,10 +33,16 @@ WMBUS.prototype.updateStates = function(){
 };
 
 var wmbus = new WMBUS(); //(log: log function, formatDate: formatDate Function);
-
+/*
 for (var i=0; i < config.length; i++) {
     var device = config[i];
     wmbus.addAESKey(device.manufacturerId, device.aesKey);
-}
+}*/
+
+console.log();
+console.log();
+console.log();
+console.log('WM-Bus Library test ...');
+
 
 wmbus.parse('683C3C680808727803491177040E16290000000C7878034911041331D40000426C0000441300000000046D1D0D98110227000009FD0E0209FD0F060F00008F13E816');
