@@ -65,9 +65,8 @@ NAN_METHOD(MbusMaster::OpenTCP) {
   int port = (long)info[1]->IntegerValue();
   char *host = get(info[0]->ToString(), "127.0.0.1");
 
-  obj->serial = false;
-
   if(!obj->connected) {
+    obj->serial = false;
     if ((port < 0) || (port > 0xFFFF))
     {
         free(host);
@@ -88,7 +87,9 @@ NAN_METHOD(MbusMaster::OpenTCP) {
     obj->connected = true;
     info.GetReturnValue().Set(Nan::True());
   }
-  info.GetReturnValue().Set(Nan::False());
+  else {
+      info.GetReturnValue().Set(Nan::False());
+  }
 }
 
 NAN_METHOD(MbusMaster::OpenSerial) {
@@ -99,8 +100,6 @@ NAN_METHOD(MbusMaster::OpenSerial) {
   long boudrate;
   int _boudrate = info[1]->IntegerValue();
   char *port = get(info[0]->ToString(), "/dev/ttyS0");
-
-  obj->serial = true;
 
   switch(_boudrate) {
     case 300:
@@ -133,6 +132,7 @@ NAN_METHOD(MbusMaster::OpenSerial) {
   }
 
   if(!obj->connected) {
+    obj->serial = true;
     if (!(obj->handle = mbus_context_serial(port)))
     {
         free(port);
@@ -155,7 +155,9 @@ NAN_METHOD(MbusMaster::OpenSerial) {
     obj->connected = true;
     info.GetReturnValue().Set(Nan::True());
   }
-  info.GetReturnValue().Set(Nan::False());
+  else {
+      info.GetReturnValue().Set(Nan::False());
+  }
 }
 
 NAN_METHOD(MbusMaster::Close) {
@@ -170,7 +172,9 @@ NAN_METHOD(MbusMaster::Close) {
     obj->connected = false;
     info.GetReturnValue().Set(Nan::True());
   }
-  info.GetReturnValue().Set(Nan::False());
+  else {
+      info.GetReturnValue().Set(Nan::False());
+  }
 }
 
 static int init_slaves(mbus_handle *handle)
