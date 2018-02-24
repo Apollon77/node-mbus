@@ -42,9 +42,10 @@ describe('Native libmbus node-module test ...', function() {
                 if (hexData.substring(0,4) === '1040') {
                     var device = hexData.substring(4,6);
                     console.log(new Date().toString() + ':     mbus-TCP-Device: Initialization Request ' + device);
-                    if (device === "fe" || device === "01" || device === "05")
-                    sendBuf = Buffer.from('5E', 'hex');
-                    sendMessage(socket, sendBuf);
+                    if (device === "fe" || device === "01" || device === "05") {
+                        sendBuf = Buffer.from('5E', 'hex');
+                        sendMessage(socket, sendBuf);
+                    }
                 }
                 else if (hexData.substring(0,4) === '105b') {
                     console.log(new Date().toString() + ':     mbus-TCP-Device: Request for Class 2 Data');
