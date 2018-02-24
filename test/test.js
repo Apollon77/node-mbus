@@ -1,4 +1,5 @@
-var net    = require('net');
+var net = require('net');
+var mbus = require('../index.js');
 
 var port        = 15000;
 var lastMessage = null;
@@ -61,10 +62,13 @@ function sendMessage(socket, message, callback) {
 }
 
 function test() {
-    var mbusmaster = require('bindings')('mbus');
-    var mbus = new mbusmaster.MbusMaster();
+    var mbusOptions = {
+        host: '127.0.0.1',
+        port: port
+    }
+    var mbusMaster = new mbus(mbusOptions);
     //console.log('Open:',mbus.openSerial('/dev/pts/5',2400));
-    console.log(new Date().toString() + ': mbus-Master Open:',mbus.openTCP('127.0.0.1', port));
+    console.log(new Date().toString() + ': mbus-Master Open:',mbusMaster.connect());
 
     /*
     mbus.get(21,function(err,data){
@@ -90,12 +94,12 @@ function test() {
     });*/
     console.log(new Date().toString() + ': mbus-Master Send "Get 1"');
 
-    mbus.get(1,function(err,data){
+    mbusMaster.getData(1, function(err, data){
         console.log(new Date().toString() + ': mbus-Master err: ' + err);
-        console.log(new Date().toString() + ': mbus-Master data: ' + JSON.stringify(JSON.parse(data), null, 2));
+        console.log(new Date().toString() + ': mbus-Master data: ' + JSON.stringify(data, null, 2));
 
         setTimeout(function() {
-            console.log(new Date().toString() + ': mbus-Master Close: ' + mbus.close());
+            console.log(new Date().toString() + ': mbus-Master Close: ' + mbusMaster.close());
             server.close();
         }, 1000);
     });
