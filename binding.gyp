@@ -5,9 +5,6 @@
 			'cflags': [
                 '-w'
 			],
-			'cflags!': [
-                '-w'
-			],
 			'include_dirs': [
 				'./libmbus/mbus',
 				"<!(node -e \"require('nan')\")"
@@ -25,9 +22,6 @@
 			'target_name': 'libmbus',
             'type': 'static_library',
 			'cflags': [
-                '-w'
-			],
-			'cflags!': [
                 '-w'
 			],
 			'include_dirs': [
