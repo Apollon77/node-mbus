@@ -8,6 +8,7 @@ node_js:
   - '8'
 before_install:
   - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export export CXX=g++-4.8; fi'
+  - npm prepublish
 addons:
   apt:
     sources:
