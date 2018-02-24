@@ -17,7 +17,9 @@
             'conditions': [
                 ['OS=="mac"', {
                     'xcode_settings': {
-                        'inhibit_all_warnings': 'YES'
+                        'OTHER_CFLAGS': [
+                            '-w'
+                        ],
                     }
                 }]
             ],
@@ -44,7 +46,9 @@
             'conditions': [
                 ['OS=="mac"', {
                     'xcode_settings': {
-                        'inhibit_all_warnings': 'YES'
+                        'OTHER_CFLAGS': [
+                            '-w'
+                        ],
                     }
                 }]
             ]
