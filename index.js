@@ -4,7 +4,7 @@
 /*jslint esversion: 6 */
 'use strict';
 
-var mbusBinding = require('bindings')('mbus')();
+var mbusBinding = require('bindings')('mbus');
 
 function MbusMaster(options) {
     this.options = options;
