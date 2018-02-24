@@ -10,7 +10,7 @@
     "node": ">= 0.10.0"
   },
   "scripts": {
-    "preinstall":"./make.sh",
+    "preinstall":"git clone https://github.com/Apollon77/libmbus.git libmbus && cp config.h libmbus/config.h",
     "build": "node-gyp build",
     "install": "node-gyp rebuild",
     "preuninstall": "rm -rf libmbus build",
