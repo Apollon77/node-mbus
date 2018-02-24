@@ -6,9 +6,9 @@
 #include <uv.h>
 #include <nan.h>
 
-class MbusMaster : public node::ObjectWrap {
+class MbusMaster : public Nan::ObjectWrap {
  public:
-  static void Init(v8::Handle<v8::Object> module);
+  static NAN_MODULE_INIT(Init);
 
  private:
   explicit MbusMaster();
@@ -20,9 +20,14 @@ class MbusMaster : public node::ObjectWrap {
   static NAN_METHOD(Close);
   static NAN_METHOD(ScanSecondary);
   static NAN_METHOD(Get);
-  static inline Nan::Persistent<v8::Function> & constructor();
-  mbus_handle *handle;
+
+  static NAN_GETTER(HandleGetters);
+  static NAN_SETTER(HandleSetters);
+
+  static Nan::Persistent<v8::FunctionTemplate> constructor;
+
   bool connected;
+  mbus_handle *handle;
   uv_rwlock_t queueLock;
   bool serial;
 };

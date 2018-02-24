@@ -4,6 +4,8 @@
 
 using namespace v8;
 
+Nan::Persistent<v8::FunctionTemplate> Vector::constructor;
+
 MbusMaster::MbusMaster() {
   connected = false;
   serial = true;
@@ -21,46 +23,46 @@ MbusMaster::~MbusMaster(){
   uv_rwlock_destroy(&queueLock);
 }
 
-void MbusMaster::Init(Handle<Object> module) {
+NAN_MODULE_INIT(MbusMaster::Init) {
   Nan::HandleScope scope;
 
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
-  tpl->SetClassName(Nan::New("MbusMaster").ToLocalChecked());
-  tpl->InstanceTemplate()->SetInternalFieldCount(1);
+  Local<FunctionTemplate> ctor = Nan::New<FunctionTemplate>(MbusMaster::New);
+  constructor.Reset(ctor);
+  ctor->InstanceTemplate()->SetInternalFieldCount(1);
+  ctor->SetClassName(Nan::New("MbusMaster").ToLocalChecked());
+
+  // link our getters and setter to the object property
+  Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("connected").ToLocalChecked(), MbusMaster::HandleGetters, MbusMaster::HandleSetters);
 
   // Prototype
-  Nan::SetPrototypeMethod(tpl, "openSerial", OpenSerial);
-  Nan::SetPrototypeMethod(tpl, "openTCP", OpenTCP);
-  Nan::SetPrototypeMethod(tpl, "close", Close);
-  Nan::SetPrototypeMethod(tpl, "get", Get);
-  Nan::SetPrototypeMethod(tpl, "scan", ScanSecondary);
+  Nan::SetPrototypeMethod(ctor, "openSerial", OpenSerial);
+  Nan::SetPrototypeMethod(ctor, "openTCP", OpenTCP);
+  Nan::SetPrototypeMethod(ctor, "close", Close);
+  Nan::SetPrototypeMethod(ctor, "get", Get);
+  Nan::SetPrototypeMethod(ctor, "scan", ScanSecondary);
 
-  constructor().Reset(Nan::GetFunction(tpl).ToLocalChecked());
-  module->Set(Nan::New("exports").ToLocalChecked(), tpl->GetFunction());
+  target->Set(Nan::New("MbusMaster").ToLocalChecked(), ctor->GetFunction());
 }
 
 NAN_METHOD(MbusMaster::New) {
   Nan::HandleScope scope;
 
-  if (info.IsConstructCall()) {
-    // Invoked as constructor: `new MbusMaster(...)`
-    MbusMaster* obj = new MbusMaster();
-    obj->Wrap(info.This());
-    info.GetReturnValue().Set(info.This());
-  } else {
-    // Invoked as plain function `MbusMaster(...)`, turn into construct call.
-    const int argc = 1;
-    Local<Value> argv[argc] = { info[0] };
-    Local<Function> cons = Nan::New(constructor());
-    info.GetReturnValue().Set(cons->NewInstance(argc, argv));
+  // throw an error if constructor is called without new keyword
+  if(!info.IsConstructCall()) {
+      return Nan::ThrowError(Nan::New("MbusMaster::New - called without new keyword").ToLocalChecked());
   }
+
+  // Invoked as constructor: `new MbusMaster(...)`
+  MbusMaster* obj = new MbusMaster();
+  obj->Wrap(info.Holder());
+  info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(MbusMaster::OpenTCP) {
   Nan::HandleScope scope;
 
-  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
+  MbusMaster* obj = Nan::ObjectWrap::Unwrap<MbusMaster>(info.This());
 
   int port = (long)info[1]->IntegerValue();
   char *host = get(info[0]->ToString(), "127.0.0.1");
@@ -95,7 +97,7 @@ NAN_METHOD(MbusMaster::OpenTCP) {
 NAN_METHOD(MbusMaster::OpenSerial) {
   Nan::HandleScope scope;
 
-  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
+  MbusMaster* obj = Nan::ObjectWrap::Unwrap<MbusMaster>(info.This());
 
   long boudrate;
   int _boudrate = info[1]->IntegerValue();
@@ -163,7 +165,7 @@ NAN_METHOD(MbusMaster::OpenSerial) {
 NAN_METHOD(MbusMaster::Close) {
     Nan::HandleScope scope;
 
-  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
+    MbusMaster* obj = Nan::ObjectWrap::Unwrap<MbusMaster>(info.This());
 
   if(obj->connected) {
     mbus_disconnect(obj->handle);
@@ -345,7 +347,7 @@ class RecieveWorker : public Nan::AsyncWorker {
 NAN_METHOD(MbusMaster::Get) {
     Nan::HandleScope scope;
 
-  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
+    MbusMaster* obj = Nan::ObjectWrap::Unwrap<MbusMaster>(info.This());
 
   char *address = get(info[0]->ToString(),"0");
   Nan::Callback *callback = new Nan::Callback(info[1].As<Function>());
@@ -480,7 +482,7 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
 NAN_METHOD(MbusMaster::ScanSecondary) {
     Nan::HandleScope scope;
 
-  MbusMaster* obj = ObjectWrap::Unwrap<MbusMaster>(info.Holder());
+    MbusMaster* obj = Nan::ObjectWrap::Unwrap<MbusMaster>(info.This());
 
   Nan::Callback *callback = new Nan::Callback(info[0].As<Function>());
   if(obj->connected) {
@@ -494,7 +496,16 @@ NAN_METHOD(MbusMaster::ScanSecondary) {
   info.GetReturnValue().SetUndefined();
 }
 
-Nan::Persistent<v8::Function> & MbusMaster::constructor() {
-    static Nan::Persistent<v8::Function> my_constructor;
-    return my_constructor;
+NAN_GETTER(MbusMaster::HandleGetters) {
+  MbusMaster* obj = Nan::ObjectWrap::Unwrap<MbusMaster>(info.This());
+
+  std::string propertyName = std::string(*Nan::Utf8String(property));
+  if (propertyName == "connected") {
+    info.GetReturnValue().Set(obj->connected);
+  } else {
+    info.GetReturnValue().Set(Nan::Undefined());
   }
+}
+
+NAN_SETTER(Vector::HandleSetters) {
+}

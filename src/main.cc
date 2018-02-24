@@ -1,10 +1,8 @@
 #include <nan.h>
 #include "mbus-master.h"
 
-using namespace v8;
-
-void init(Handle<Object> exports, Handle<Object> module) {
-  MbusMaster::Init(module);
+NAN_MODULE_INIT(InitModule) {
+    MbusMaster::Init(target);
 }
 
-NODE_MODULE(mbus, init)
+NODE_MODULE(mbus, InitModule)

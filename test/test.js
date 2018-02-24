@@ -61,7 +61,8 @@ function sendMessage(socket, message, callback) {
 }
 
 function test() {
-    var mbus = require('bindings')('mbus')();
+    var mbusmaster = require('bindings')('mbus');
+    var mbus = new MbusMaster();
     //console.log('Open:',mbus.openSerial('/dev/pts/5',2400));
     console.log(new Date().toString() + ': mbus-Master Open:',mbus.openTCP('127.0.0.1', port));
 
