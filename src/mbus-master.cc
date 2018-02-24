@@ -4,7 +4,7 @@
 
 using namespace v8;
 
-Nan::Persistent<v8::FunctionTemplate> Vector::constructor;
+Nan::Persistent<v8::FunctionTemplate> MbusMaster::constructor;
 
 MbusMaster::MbusMaster() {
   connected = false;
@@ -507,5 +507,5 @@ NAN_GETTER(MbusMaster::HandleGetters) {
   }
 }
 
-NAN_SETTER(Vector::HandleSetters) {
+NAN_SETTER(MbusMaster::HandleSetters) {
 }
