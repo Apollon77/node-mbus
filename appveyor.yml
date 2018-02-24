@@ -12,7 +12,6 @@ install:
   - ps: 'Install-Product node $env:nodejs_version $env:platform'
   - npm install
 test_script:
-  - echo %cd%
   - node --version
   - npm --version
   - npm test
