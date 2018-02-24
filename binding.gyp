@@ -14,6 +14,13 @@
 				'./src/mbus-master.cc',
 				'./src/util.cc'
 			],
+            'conditions': [
+                ['OS=="mac"', {
+                    'xcode_settings': {
+                        'inhibit_all_warnings': 'YES'
+                    }
+                }]
+            ],
             'dependencies': [
                 'libmbus'
             ]
@@ -33,7 +40,14 @@
 				'./libmbus/mbus/mbus-serial.c',
 				'./libmbus/mbus/mbus-tcp.c',
 				'./libmbus/mbus/mbus.c'
-			]
+			],
+            'conditions': [
+                ['OS=="mac"', {
+                    'xcode_settings': {
+                        'inhibit_all_warnings': 'YES'
+                    }
+                }]
+            ]
 		}
 	]
 }
