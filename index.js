@@ -81,12 +81,13 @@ MbusMaster.prototype.getData = function getData(address, callback) {
         return;
     }
 
+    var self = this;
     this.connect(function(err) {
         if (err) {
             if (callback) callback(err);
             return;
         }
-        this.mbusMaster.get(address, function(err, data) {
+        self.mbusMaster.get(address, function(err, data) {
             if (!err && data) {
                 try {
                     data = JSON.parse(data);
@@ -107,12 +108,13 @@ MbusMaster.prototype.scanSecondary = function scanSecondary(callback) {
         return;
     }
 
+    var self = this;
     this.connect(function(err) {
         if (err) {
             if (callback) callback(err);
             return;
         }
-        this.mbusMaster.scan(function(err, data) {
+        self.mbusMaster.scan(function(err, data) {
             if (!err && data) {
                 data = data.split(',');
             }
