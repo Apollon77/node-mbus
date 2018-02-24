@@ -90,7 +90,7 @@ MbusMaster.prototype.getData = function getData(address, callback) {
         self.mbusMaster.get(address, function(err, data) {
             if (!err && data) {
                 try {
-                    data = JSON.parse(data);
+                    data = JSON.parse(data).MBusData;
                 }
                 catch (e) {
                     err = e;

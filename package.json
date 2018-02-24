@@ -13,7 +13,7 @@
     "prepublish":"rm -rf libmbus && git clone https://github.com/Apollon77/libmbus.git libmbus && cp config.h libmbus/config.h",
     "build": "node-gyp build",
     "install": "node-gyp rebuild",
-    "test": "node test/test.js"
+    "test": "node node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec"
   },
   "author": {
     "name": "Semen Krivosheev",
@@ -37,5 +37,10 @@
   "dependencies": {
     "bindings": "^1.3.0",
     "nan": "~2.8.0"
+  },
+  "devDependencies": {
+    "mocha": "^5.0.0",
+    "chai": "^4.1.2",
+    "istanbul": "*"
   }
 }
