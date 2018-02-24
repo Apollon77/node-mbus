@@ -81,14 +81,14 @@ describe('Native libmbus node-module test ...', function() {
                     console.log(new Date().toString() + ': mbus-Master data: ' + JSON.stringify(data, null, 2));
                     expect(err).to.be.null;
                     expect(data.SlaveInformation.Id).to.be.equal(11490378);
-                    expect(data.DataRecords[0].Value).to.be.equal(11490378);
+                    expect(data.DataRecords[0].Value).to.be.equal('11490378');
 
                     mbusMaster.getData(2, function(err, data) {
                         console.log(new Date().toString() + ': mbus-Master err: ' + err);
                         console.log(new Date().toString() + ': mbus-Master data: ' + JSON.stringify(data, null, 2));
                         expect(err).to.be.null;
                         expect(data.SlaveInformation.Id).to.be.equal(11490378);
-                        expect(data.DataRecords[0].Value).to.be.equal(11490378);
+                        expect(data.DataRecords[0].Value).to.be.equal('11490378');
 
                         mbusMaster.scanSecondary(function(err, data) {
                             console.log(new Date().toString() + ': mbus-Master err: ' + err);
