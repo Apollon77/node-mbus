@@ -10,7 +10,7 @@
     "node": ">= 4"
   },
   "scripts": {
-    "prepublish":"git clone https://github.com/Apollon77/libmbus.git libmbus && cp config.h libmbus/config.h",
+    "prepublish":"rm -rf libmbus && git clone https://github.com/Apollon77/libmbus.git libmbus && cp config.h libmbus/config.h",
     "build": "node-gyp build",
     "install": "node-gyp rebuild",
     "test": "node test/test.js"
