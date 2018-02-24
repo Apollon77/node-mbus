@@ -94,7 +94,7 @@ describe('Native libmbus node-module test ...', function() {
                             console.log(new Date().toString() + ': mbus-Master err: ' + err);
                             console.log(new Date().toString() + ': mbus-Master data: ' + JSON.stringify(data, null, 2));
                             expect(err).to.be.null;
-                            expect(data).to.be.an.array;
+                            expect(data).to.be.an('array');
                             expect(data.length).to.be.equal(0);
 
                             setTimeout(function() {
