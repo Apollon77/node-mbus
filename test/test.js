@@ -92,16 +92,23 @@ function test() {
     mbus.get(21,function(err,data){
     	console.log('8:',err,data);
     });*/
-    console.log(new Date().toString() + ': mbus-Master Send "Get 1"');
+    setTimeout(function() {
+        console.log(new Date().toString() + ': mbus-Master Send "Get 1"');
 
-    mbusMaster.getData(1, function(err, data){
-        console.log(new Date().toString() + ': mbus-Master err: ' + err);
-        console.log(new Date().toString() + ': mbus-Master data: ' + JSON.stringify(data, null, 2));
+        mbusMaster.getData(1, function(err, data){
+            console.log(new Date().toString() + ': mbus-Master err: ' + err);
+            console.log(new Date().toString() + ': mbus-Master data: ' + JSON.stringify(data, null, 2));
 
-        setTimeout(function() {
-            console.log(new Date().toString() + ': mbus-Master Close: ' + mbusMaster.close());
-            server.close();
-        }, 1000);
-    });
+            mbusMaster.getData(2, function(err, data){
+                console.log(new Date().toString() + ': mbus-Master err: ' + err);
+                console.log(new Date().toString() + ': mbus-Master data: ' + JSON.stringify(data, null, 2));
+
+                setTimeout(function() {
+                    console.log(new Date().toString() + ': mbus-Master Close: ' + mbusMaster.close());
+                    server.close();
+                }, 1000);
+            });
+        });
+    }, 2000);
     //socat tcp-l:54321,reuseaddr,fork file:/dev/ttyS0,nonblock,waitlock=/var/run/ttyS0.lock,b2400
 }
