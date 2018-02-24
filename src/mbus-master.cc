@@ -295,14 +295,14 @@ class RecieveWorker : public Nan::AsyncWorker {
     }
 
     //
-    // generate XML and print to standard output
+    // generate JSON
     //
     if ((data = mbus_frame_data_json(&reply_data)) == NULL)
     {
         sprintf(error, "Failed to generate JSON representation of MBUS frame [%s].", addr_str);
         SetErrorMessage(error);
-        uv_rwlock_wrunlock(lock);
-        return;
+        //uv_rwlock_wrunlock(lock);
+        //return;
     }
 
     // manual free
