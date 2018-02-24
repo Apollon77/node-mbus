@@ -116,7 +116,12 @@ MbusMaster.prototype.scanSecondary = function scanSecondary(callback) {
         }
         self.mbusMaster.scan(function(err, data) {
             if (!err && data !== null && data !== undefined && typeof data === 'string' ) {
-                data = data.split(',');
+                if (data === '') {
+                    data = [];
+                }
+                else {
+                    data = data.split(',');
+                }
             }
             if (callback) callback(err, data);
         });
