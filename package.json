@@ -3,17 +3,16 @@
   "version": "0.0.1",
   "description": "libmbus binding",
   "keywords": [
-    "modbus"
+    "mbus"
   ],
   "main": "build/Release/mbus",
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 4"
   },
   "scripts": {
-    "preinstall":"./make.sh",
+    "prepublish":"rm -rf libmbus && git clone https://github.com/Apollon77/libmbus.git libmbus && cp config.h libmbus/config.h",
     "build": "node-gyp build",
     "install": "node-gyp rebuild",
-    "preuninstall": "rm -rf libmbus build",
     "test": "node test/test.js"
   },
   "author": {
@@ -24,11 +23,15 @@
     {
       "name": "Semen Krivosheev",
       "email": "semen.krivosheev@gmail.com"
+  },
+    {
+      "name": "Apollon77",
+      "email": "ingo@fischer-ka.de"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/samkrew/node_mbus"
+    "url": "https://github.com/Apollon77/node_mbus"
   },
   "license": "MIT",
   "dependencies": {
