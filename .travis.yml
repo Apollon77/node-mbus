@@ -8,7 +8,7 @@ node_js:
   - '8'
 before_install:
   - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export export CXX=g++-4.8; fi'
-  - npm prepublish
+  - git clone https://github.com/Apollon77/libmbus.git libmbus && cp config.h libmbus/config.h
 addons:
   apt:
     sources:
