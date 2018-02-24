@@ -3,6 +3,7 @@
 		{
 			'target_name': 'mbus',
 			'cflags': [
+                '-w'
 			],
 			'include_dirs': [
 				'./libmbus/mbus',
@@ -21,6 +22,7 @@
 			'target_name': 'libmbus',
             'type': 'static_library',
 			'cflags': [
+                '-w'
 			],
 			'include_dirs': [
 				'./libmbus/mbus',
