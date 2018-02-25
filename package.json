@@ -1,5 +1,5 @@
 {
-  "name": "mbus",
+  "name": "node-mbus",
   "version": "0.0.1",
   "description": "libmbus binding",
   "keywords": [
@@ -9,6 +9,10 @@
   "engines": {
     "node": ">= 4"
   },
+  "os": [
+    "darwin",
+    "linux"
+  ],
   "scripts": {
     "prepublish":"rm -rf libmbus && git clone https://github.com/Apollon77/libmbus.git libmbus && cp config.h libmbus/config.h",
     "build": "node-gyp build",
@@ -23,7 +27,7 @@
     {
       "name": "Semen Krivosheev",
       "email": "semen.krivosheev@gmail.com"
-  },
+    },
     {
       "name": "Apollon77",
       "email": "ingo@fischer-ka.de"
