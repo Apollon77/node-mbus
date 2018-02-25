@@ -1,10 +1,14 @@
 version: 'test-{build}'
 environment:
   matrix:
-    allow_failures:
-      - nodejs_version: '4'
-      - nodejs_version: '6'
-      - nodejs_version: '8'
+    - nodejs_version: '4'
+    - nodejs_version: '6'
+    - nodejs_version: '8'
+matrix:
+  allow_failures:
+    - nodejs_version: '4'
+    - nodejs_version: '6'
+    - nodejs_version: '8'
 platform:
   - x86
   - x64
