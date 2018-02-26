@@ -11,7 +11,8 @@
   },
   "os": [
     "darwin",
-    "linux"
+    "linux",
+    "win32"
   ],
   "scripts": {
     "prepublish":"rm -rf libmbus && git clone https://github.com/Apollon77/libmbus.git libmbus && cp config.h libmbus/config.h",
