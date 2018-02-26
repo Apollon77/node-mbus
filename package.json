@@ -18,7 +18,7 @@
     "prepublish":"rm -rf libmbus && git clone https://github.com/Apollon77/libmbus.git libmbus && cp config.h libmbus/config.h",
     "build": "node-gyp build",
     "install": "node-gyp rebuild",
-    "test": "node node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec"
+    "test": "node test/test.js"
   },
   "author": {
     "name": "Semen Krivosheev",
