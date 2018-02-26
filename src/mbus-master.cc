@@ -273,6 +273,11 @@ class RecieveWorker : public Nan::AsyncWorker {
         address = atoi(addr_str);
     }
 
+    sprintf(error, "Before send request frame [%s].", addr_str);
+    SetErrorMessage(error);
+    uv_rwlock_wrunlock(lock);
+    return;
+
     if (mbus_send_request_frame(handle, address) == -1)
     {
         sprintf(error, "Failed to send M-Bus request frame[%s].", addr_str);
@@ -357,171 +362,14 @@ NAN_METHOD(MbusMaster::Get) {
 
   char *address = get(info[0]->ToString(),"0");
   Nan::Callback *callback = new Nan::Callback(info[1].As<Function>());
-  /*if(obj->connected) {
+  if(obj->connected) {
     Nan::AsyncQueueWorker(new RecieveWorker(callback, address, &(obj->queueLock), obj->handle));
   } else {
     Local<Value> argv[] = {
         Nan::Error("Not connected to port")
     };
     callback->Call(1, argv);
-}*/
-
-uv_rwlock_wrlock(lock);
-
-mbus_frame reply;
-mbus_frame_data reply_data;
-char error[100];
-int address;
-
-memset((void *)&reply, 0, sizeof(mbus_frame));
-memset((void *)&reply_data, 0, sizeof(mbus_frame_data));
-
-if (init_slaves(handle) == 0)
-{
-    mbus_disconnect(handle);
-    mbus_context_free(handle);
-    sprintf(error, "Failed to init slaves.");
-    SetErrorMessage(error);
-    uv_rwlock_wrunlock(lock);
-    Local<Value> argv[] = {
-        Nan::Error(ErrorMessage())
-    };
-
-    callback->Call(1, argv);
-    return;
-}
-
-if (mbus_is_secondary_address(addr_str))
-{
-    // secondary addressing
-
-    int ret;
-
-    ret = mbus_select_secondary_address(handle, addr_str);
-
-    if (ret == MBUS_PROBE_COLLISION)
-    {
-        sprintf(error, "The address mask [%s] matches more than one device.", addr_str);
-        SetErrorMessage(error);
-        uv_rwlock_wrunlock(lock);
-        Local<Value> argv[] = {
-            Nan::Error(ErrorMessage())
-        };
-
-        callback->Call(1, argv);
-        return;
-    }
-    else if (ret == MBUS_PROBE_NOTHING)
-    {
-        sprintf(error, "The selected secondary address does not match any device [%s].", addr_str);
-        SetErrorMessage(error);
-        uv_rwlock_wrunlock(lock);
-        Local<Value> argv[] = {
-            Nan::Error(ErrorMessage())
-        };
-
-        callback->Call(1, argv);
-        return;
-    }
-    else if (ret == MBUS_PROBE_ERROR)
-    {
-        sprintf(error, "Failed to select secondary address [%s].", addr_str);
-        SetErrorMessage(error);
-        uv_rwlock_wrunlock(lock);
-        Local<Value> argv[] = {
-            Nan::Error(ErrorMessage())
-        };
-
-        callback->Call(1, argv);
-        return;
-    }
-    // else MBUS_PROBE_SINGLE
-
-    address = MBUS_ADDRESS_NETWORK_LAYER;
-}
-else
-{
-    // primary addressing
-    address = atoi(addr_str);
-}
-
-if (mbus_send_request_frame(handle, address) == -1)
-{
-    sprintf(error, "Failed to send M-Bus request frame[%s].", addr_str);
-    SetErrorMessage(error);
-    uv_rwlock_wrunlock(lock);
-    Local<Value> argv[] = {
-        Nan::Error(ErrorMessage())
-    };
-
-    callback->Call(1, argv);
-    return;
-}
-
-if (mbus_recv_frame(handle, &reply) != MBUS_RECV_RESULT_OK)
-{
-    sprintf(error, "Failed to receive M-Bus response frame[%s].", addr_str);
-    SetErrorMessage(error);
-    uv_rwlock_wrunlock(lock);
-    Local<Value> argv[] = {
-        Nan::Error(ErrorMessage())
-    };
-
-    callback->Call(1, argv);
-    return;
-}
-
-//
-// parse data
-//
-if (mbus_frame_data_parse(&reply, &reply_data) == -1)
-{
-    sprintf(error, "M-bus data parse error [%s].", addr_str);
-    SetErrorMessage(error);
-    uv_rwlock_wrunlock(lock);
-    Local<Value> argv[] = {
-        Nan::Error(ErrorMessage())
-    };
-
-    callback->Call(1, argv);
-    return;
-}
-
-//
-// generate JSON
-//
-if ((data = mbus_frame_data_json(&reply_data)) == NULL)
-{
-    sprintf(error, "Failed to generate JSON representation of MBUS frame [%s].", addr_str);
-    SetErrorMessage(error);
-    //uv_rwlock_wrunlock(lock);
-    //return;
-    Local<Value> argv[] = {
-        Nan::Error(ErrorMessage())
-    };
-
-    callback->Call(1, argv);
-}
-else {
-    Local<Value> argv[] = {
-        Nan::Null(),
-        Nan::New<String>(data).ToLocalChecked()
-    };
-    free(data);
-    callback->Call(2, argv);
-
-}
-
-// manual free
-if (reply_data.data_var.record)
-{
-    mbus_data_record_free(reply_data.data_var.record);
-}
-
-uv_rwlock_wrunlock(lock);
-
-
-
+  }
   info.GetReturnValue().SetUndefined();
 }
 
