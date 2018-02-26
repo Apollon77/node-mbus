@@ -83,6 +83,7 @@ describe('Native libmbus node-module test ...', function() {
             };
             var mbusMaster = new MbusMaster(mbusOptions);
             console.log(new Date().toString() + ': mbus-Master Open:',mbusMaster.connect());
+            expect(mbusMaster.mbusMaster.connected).to.be.true;
             setTimeout(function() {
                 console.log(new Date().toString() + ': mbus-Master Send "Get 1"');
 
