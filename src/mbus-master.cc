@@ -273,11 +273,6 @@ class RecieveWorker : public Nan::AsyncWorker {
         address = atoi(addr_str);
     }
 
-    sprintf(error, "Before send request frame [%s].", addr_str);
-    SetErrorMessage(error);
-    uv_rwlock_wrunlock(lock);
-    return;
-
     if (mbus_send_request_frame(handle, address) == -1)
     {
         sprintf(error, "Failed to send M-Bus request frame[%s].", addr_str);
