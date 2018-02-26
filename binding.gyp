@@ -50,6 +50,11 @@
                             '-w'
                         ],
                     }
+                }],
+                ['OS=="win"', {
+			        'sources': [
+                        './libmbus/win/termiWin.c'
+                    ]
                 }]
             ]
 		}
