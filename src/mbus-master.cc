@@ -1,6 +1,12 @@
 #include "mbus-master.h"
 #include "util.h"
+
+#ifdef _WIN32
+#include <stdlib.h>
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 
 using namespace v8;
 
