@@ -8,6 +8,8 @@
 #include <unistd.h>
 #endif
 
+#define MBUS_ERROR(...) fprintf (stderr, __VA_ARGS__)
+
 using namespace v8;
 
 Nan::Persistent<v8::FunctionTemplate> MbusMaster::constructor;
@@ -84,6 +86,7 @@ NAN_METHOD(MbusMaster::OpenTCP) {
     {
         free(host);
         info.GetReturnValue().Set(Nan::False());
+        return;
     }
     free(host);
     if (mbus_connect(obj->handle) == -1)
@@ -91,13 +94,13 @@ NAN_METHOD(MbusMaster::OpenTCP) {
       mbus_context_free(obj->handle);
       obj->handle = NULL;
       info.GetReturnValue().Set(Nan::False());
+      return;
     }
     obj->connected = true;
     info.GetReturnValue().Set(Nan::True());
+    return;
   }
-  else {
-      info.GetReturnValue().Set(Nan::False());
-  }
+  info.GetReturnValue().Set(Nan::False());
 }
 
 NAN_METHOD(MbusMaster::OpenSerial) {
@@ -145,6 +148,7 @@ NAN_METHOD(MbusMaster::OpenSerial) {
     {
         free(port);
         info.GetReturnValue().Set(Nan::False());
+        return;
     }
     free(port);
     if (mbus_connect(obj->handle) == -1)
@@ -152,6 +156,8 @@ NAN_METHOD(MbusMaster::OpenSerial) {
       mbus_context_free(obj->handle);
       obj->handle = NULL;
       info.GetReturnValue().Set(Nan::False());
+      MBUS_ERROR("%s: Unable to connect.\n", __PRETTY_FUNCTION__);
+      return;
     }
     if (mbus_serial_set_baudrate(obj->handle, boudrate) == -1)
     {
@@ -159,13 +165,14 @@ NAN_METHOD(MbusMaster::OpenSerial) {
         mbus_context_free(obj->handle);
         obj->handle = NULL;
         info.GetReturnValue().Set(Nan::False());
+        MBUS_ERROR("%s: Unable to set baudrate.\n", __PRETTY_FUNCTION__);
+        return;
     }
     obj->connected = true;
     info.GetReturnValue().Set(Nan::True());
+    return;
   }
-  else {
-      info.GetReturnValue().Set(Nan::False());
-  }
+  info.GetReturnValue().Set(Nan::False());
 }
 
 NAN_METHOD(MbusMaster::Close) {
