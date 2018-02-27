@@ -14,7 +14,7 @@ var port        = 15001;
 var lastMessage = null;
 
 
-var spawn  = require('child_process');
+var spawn  = require('child_process').spawn;
 
 function sendMessage(socket, message, callback) {
     console.log(new Date().toString() + ':     mbus-Serial-Device: Send to Master: ' + message.toString('hex'));
