@@ -80,35 +80,35 @@ describe('Native libmbus node-module Serial test ...', function() {
 
             var socat;
             if (!(process.env.APPVEYOR && process.env.APPVEYOR==='True')) {
-                socat = spawn('socat', ['-xs', 'pty,link=/tmp/virtualcom0,ispeed=2400,ospeed=2400,b2400,raw', 'tcp:127.0.0.1:15001']);
+                socat = spawn('socat', ['-xs', 'pty,link=/tmp/virtualcom0,ispeed=9600,ospeed=9600,b9600,raw', 'tcp:127.0.0.1:15001']);
             }
             else {
-                socat = spawn(__dirname + '../socat/socat.exe', ['-xs', 'pty,link=\\\\.\\CNCB0,ispeed=2400,ospeed=2400,b2400,raw', 'tcp:127.0.0.1:15001']);
+                socat = spawn(__dirname + '../socat/socat.exe', ['-xs', 'pty,link=\\\\.\\CNCB0,ispeed=9600,ospeed=9600,b9600,raw', 'tcp:127.0.0.1:15001']);
             }
             console.log('mbus-Serial-Device: Socat spawned');
             socat.stdout.on('data', function(data) {
-              console.log('socat stdout: ${data}');
+              console.log('socat stdout: ' + data);
             });
 
             socat.stderr.on('data', function(data) {
-              console.log('socat stderr: ${data}');
+              console.log('socat stderr: ' + data);
             });
 
             socat.on('close', function(code) {
-              console.log('socat child process exited with code ${code}');
+              console.log('socat child process exited with code ' + code);
             });
 
             setTimeout(function() {
                 if (!(process.env.APPVEYOR && process.env.APPVEYOR==='True')) {
                     var mbusOptions = {
                         serialPort: '/tmp/virtualcom0',
-                        serialBaudRate: 2400
+                        serialBaudRate: 9600
                     };
                 }
                 else {
                     var mbusOptions = {
                         serialPort: 'CNCB0',
-                        serialBaudRate: 2400
+                        serialBaudRate: 9600
                     };
                 }
                 var mbusMaster = new MbusMaster(mbusOptions);
