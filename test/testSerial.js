@@ -10,7 +10,7 @@ var expect = require('chai').expect;
 var net = require('net');
 var MbusMaster = require('../index.js');
 
-var port        = 15000;
+var port        = 15001;
 var lastMessage = null;
 
 console.log('Native libmbus node-module test ...');
@@ -78,8 +78,8 @@ describe('Native libmbus node-module test ...', function() {
             console.log('mbus-TCP-Device: Listening');
 
             var mbusOptions = {
-                host: '127.0.0.1',
-                port: port
+                serialPort: '/dev/virtualcom0',
+                serialBaudRate: 2400
             };
             var mbusMaster = new MbusMaster(mbusOptions);
             console.log(new Date().toString() + ': mbus-Master Open:',mbusMaster.connect());
@@ -110,8 +110,9 @@ describe('Native libmbus node-module test ...', function() {
 
                             setTimeout(function() {
                                 console.log(new Date().toString() + ': mbus-Master Close: ' + mbusMaster.close());
-                                server.close();
-                                done();
+                                server.close(function(err) {
+                                    done();
+                                });
                             }, 1000);
                         });
                     });
