@@ -78,7 +78,7 @@ describe('Native libmbus node-module test ...', function() {
             console.log('mbus-TCP-Device: Listening');
 
             var mbusOptions = {
-                serialPort: '/dev/virtualcom0',
+                serialPort: '/tmp/virtualcom0',
                 serialBaudRate: 2400
             };
             var mbusMaster = new MbusMaster(mbusOptions);
