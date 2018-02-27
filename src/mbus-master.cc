@@ -2,6 +2,10 @@
 #include "util.h"
 
 #ifdef _WIN32
+#define __PRETTY_FUNCTION__ __FUNCSIG__
+#endif
+
+#ifdef _WIN32
 #include <stdlib.h>
 #include <io.h>
 #else
@@ -159,6 +163,7 @@ NAN_METHOD(MbusMaster::OpenSerial) {
       MBUS_ERROR("%s: Unable to connect.\n", __PRETTY_FUNCTION__);
       return;
     }
+    /* // TODO Find solution!!
     if (mbus_serial_set_baudrate(obj->handle, boudrate) == -1)
     {
         mbus_disconnect(obj->handle);
@@ -167,7 +172,7 @@ NAN_METHOD(MbusMaster::OpenSerial) {
         info.GetReturnValue().Set(Nan::False());
         MBUS_ERROR("%s: Unable to set baudrate.\n", __PRETTY_FUNCTION__);
         return;
-    }
+    }*/
     obj->connected = true;
     info.GetReturnValue().Set(Nan::True());
     return;
