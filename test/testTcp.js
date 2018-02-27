@@ -13,8 +13,6 @@ var MbusMaster = require('../index.js');
 var port        = 15000;
 var lastMessage = null;
 
-console.log('Native libmbus node-module test ...');
-
 function sendMessage(socket, message, callback) {
     console.log(new Date().toString() + ':     mbus-TCP-Device: Send to Master: ' + message.toString('hex'));
     socket.write(message, function(err) {
@@ -23,13 +21,13 @@ function sendMessage(socket, message, callback) {
     });
 }
 
-describe('Native libmbus node-module test ...', function() {
+describe('Native libmbus node-module TCP test ...', function() {
 
-    it('Test Reading', function (done) {
+    it('Test Reading TCP', function (done) {
         this.timeout(150000); // because of first install from npm
 
         var server = net.createServer(function(socket) {
-            console.log(new Date().toString() + ': mbus-TCP-Device: Connected!');
+            console.log(new Date().toString() + ': mbus-TCP-Device: Connected ' + port + '!');
 
             socket.setNoDelay();
 
@@ -82,34 +80,34 @@ describe('Native libmbus node-module test ...', function() {
                 port: port
             };
             var mbusMaster = new MbusMaster(mbusOptions);
-            console.log(new Date().toString() + ': mbus-Master Open:',mbusMaster.connect());
+            console.log(new Date().toString() + ': mbus-TCP-Master Open:',mbusMaster.connect());
             expect(mbusMaster.mbusMaster.connected).to.be.true;
             setTimeout(function() {
-                console.log(new Date().toString() + ': mbus-Master Send "Get 1"');
+                console.log(new Date().toString() + ': mbus-TCP-Master Send "Get 1"');
 
                 mbusMaster.getData(1, function(err, data) {
-                    console.log(new Date().toString() + ': mbus-Master err: ' + err);
-                    console.log(new Date().toString() + ': mbus-Master data: ' + JSON.stringify(data, null, 2));
+                    console.log(new Date().toString() + ': mbus-TCP-Master err: ' + err);
+                    console.log(new Date().toString() + ': mbus-TCP-Master data: ' + JSON.stringify(data, null, 2));
                     expect(err).to.be.null;
                     expect(data.SlaveInformation.Id).to.be.equal(11490378);
                     expect(data.DataRecords[0].Value).to.be.equal('11490378');
 
                     mbusMaster.getData(2, function(err, data) {
-                        console.log(new Date().toString() + ': mbus-Master err: ' + err);
-                        console.log(new Date().toString() + ': mbus-Master data: ' + JSON.stringify(data, null, 2));
+                        console.log(new Date().toString() + ': mbus-TCP-Master err: ' + err);
+                        console.log(new Date().toString() + ': mbus-TCP-Master data: ' + JSON.stringify(data, null, 2));
                         expect(err).to.be.null;
                         expect(data.SlaveInformation.Id).to.be.equal(5000244);
                         expect(data.DataRecords[0].Value).to.be.equal('1252');
 
                         mbusMaster.scanSecondary(function(err, data) {
-                            console.log(new Date().toString() + ': mbus-Master err: ' + err);
-                            console.log(new Date().toString() + ': mbus-Master data: ' + JSON.stringify(data, null, 2));
+                            console.log(new Date().toString() + ': mbus-TCP-Master err: ' + err);
+                            console.log(new Date().toString() + ': mbus-TCP-Master data: ' + JSON.stringify(data, null, 2));
                             expect(err).to.be.null;
                             expect(data).to.be.an('array');
                             expect(data.length).to.be.equal(0);
 
                             setTimeout(function() {
-                                console.log(new Date().toString() + ': mbus-Master Close: ' + mbusMaster.close());
+                                console.log(new Date().toString() + ': mbus-TCP-Master Close: ' + mbusMaster.close());
                                 server.close(function() {
                                     done();
                                 });
