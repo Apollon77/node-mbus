@@ -10,7 +10,7 @@ platform:
 clone_folder: 'c:\projects\%APPVEYOR_PROJECT_NAME%'
 install:
   - ps: 'Install-Product node $env:nodejs_version $env:platform'
-  - git clone https://github.com/StudioEtrange/socat-windows socat
+  - git clone https://github.com/tech128/socat-1.7.3.0-windows socat
   - git clone -b build-windows --single-branch https://github.com/Apollon77/libmbus.git libmbus
   - cp config.h libmbus/config.h
   - npm install
