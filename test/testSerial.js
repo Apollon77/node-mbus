@@ -83,7 +83,7 @@ describe('Native libmbus node-module Serial test ...', function() {
                 socat = spawn('socat', ['-xs', 'pty,link=/tmp/virtualcom0,ispeed=9600,ospeed=9600,b9600,raw', 'tcp:127.0.0.1:15001']);
             }
             else {
-                socat = spawn(__dirname + '/../socat/socat.exe', ['-xs', 'pty,link=\\\\.\\CNCB0,ispeed=9600,ospeed=9600,b9600,raw', 'tcp:127.0.0.1:15001']);
+                socat = spawn(__dirname + '/../socat/socat.exe', ['-xs', 'pty,link=COM1,ispeed=9600,ospeed=9600,b9600,raw', 'tcp:127.0.0.1:15001']);
             }
             console.log('mbus-Serial-Device: Socat spawned');
             socat.stdout.on('data', function(data) {
@@ -107,7 +107,7 @@ describe('Native libmbus node-module Serial test ...', function() {
                 }
                 else {
                     var mbusOptions = {
-                        serialPort: 'CNCB0',
+                        serialPort: 'COM1',
                         serialBaudRate: 9600
                     };
                 }
@@ -140,11 +140,14 @@ describe('Native libmbus node-module Serial test ...', function() {
 
                                 setTimeout(function() {
                                     console.log(new Date().toString() + ': mbus-Serial-Master Close: ' + mbusMaster.close());
-                                    server.close(function(err) {
-                                        socat.kill();
-                                        console.log('mbus-Serial-Device: Socat killed');
-                                        done();
-                                    });
+                                    socat.kill(SIGKILL);
+                                    console.log('mbus-Serial-Device: Socat killed');
+                                    setTimeout(function() {
+                                        server.close(function(err) {
+                                            console.log('mbus-Serial-Device: Server closed');
+                                            setTimeout(done, 2000);
+                                        });
+                                    }, 1000);
                                 }, 1000);
                             });
                         });
