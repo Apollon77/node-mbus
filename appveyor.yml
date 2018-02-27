@@ -22,5 +22,5 @@ test_script:
   - node --version
   - npm --version
   - npm test & exit 0
-  - type crash.log
+  - type crash.log & exit 0
 build: 'off'
