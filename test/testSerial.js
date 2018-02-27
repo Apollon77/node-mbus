@@ -85,6 +85,7 @@ describe('Native libmbus node-module Serial test ...', function() {
             else {
                 socat = spawn(__dirname + '../socat/socat.exe', ['pty,link=\\\\.\\CNCB0,raw', 'tcp:127.0.0.1:15001']);
             }
+            console.log('mbus-Serial-Device: Socat connected');
             socat.stdout.on('data', function(data) {
               console.log('socat stdout: ${data}');
             });
