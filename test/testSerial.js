@@ -80,7 +80,7 @@ describe('Native libmbus node-module Serial test ...', function() {
 
             var socat;
             if (!(process.env.APPVEYOR && process.env.APPVEYOR==='True')) {
-                socat = spawn('socat', ['-xs', 'pty,link=/tmp/virtualcom0,ispeed=9600,ospeed=9600,b9600,raw', 'tcp:127.0.0.1:15001']);
+                socat = spawn('socat', ['-xs', 'pty,link=/tmp/virtualcom0,ispeed=9600,ospeed=9600,raw', 'tcp:127.0.0.1:15001']);
             }
             else { // com2tcp.exe --ignore-dsr --baud 57600 \.\COM6 192.168.11.80 11001
                 socat = spawn(__dirname + '/win/com2tcp.exe', ['--ignore-dsr', '--baud', '9600', '\\.\\COM1', '127.0.0.1', '15001']);
