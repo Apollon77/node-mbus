@@ -16,7 +16,7 @@ install:
   - npm install
 test_script:
   - ps: |-
-      $MyProcess = Start-Process -FilePath socat/socat -ArgumentList ('pty,link=/tmp/virtualcom0,raw','tcp:127.0.0.1:15001') -PassThru;
+      $MyProcess = Start-Process -FilePath socat/socat -ArgumentList ('pty,link=\\.\CNCB0,raw','tcp:127.0.0.1:15001') -PassThru;
   - node --version
   - npm --version
   - npm test

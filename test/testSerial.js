@@ -77,10 +77,18 @@ describe('Native libmbus node-module test ...', function() {
         server.on('listening', function() {
             console.log('mbus-TCP-Device: Listening');
 
-            var mbusOptions = {
-                serialPort: '/tmp/virtualcom0',
-                serialBaudRate: 2400
-            };
+            if (!(process.env.APPVEYOR && process.env.APPVEYOR==='True')) {
+                var mbusOptions = {
+                    serialPort: '/tmp/virtualcom0',
+                    serialBaudRate: 2400
+                };
+            }
+            else {
+                var mbusOptions = {
+                    serialPort: 'CNCB0',
+                    serialBaudRate: 2400
+                };
+            }
             var mbusMaster = new MbusMaster(mbusOptions);
             console.log(new Date().toString() + ': mbus-Master Open:',mbusMaster.connect());
             expect(mbusMaster.mbusMaster.connected).to.be.true;

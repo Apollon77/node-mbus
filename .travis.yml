@@ -12,7 +12,7 @@ before_install:
   - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter; fi'
   - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then chmod +x ./cc-test-reporter; fi'
   - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./cc-test-reporter before-build; fi'
-  - socat  pty,link=/dev/virtualcom0,raw  tcp:127.0.0.1:15001&
+  - socat pty,link=/dev/virtualcom0,raw tcp:127.0.0.1:15001&
 after_success:
   - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT -r 22e3e060ccffa9ceda43fcdcca5445251fe4f93cf4a98547a76f7897a6b1b877; fi'
 addons:
