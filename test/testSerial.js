@@ -85,7 +85,7 @@ describe('Native libmbus node-module Serial test ...', function() {
             else {
                 socat = spawn(__dirname + '../socat/socat.exe', ['-xs', 'pty,link=\\\\.\\CNCB0,raw', 'tcp:127.0.0.1:15001']);
             }
-            console.log('mbus-Serial-Device: Socat connected');
+            console.log('mbus-Serial-Device: Socat spawned');
             socat.stdout.on('data', function(data) {
               console.log('socat stdout: ${data}');
             });
@@ -142,6 +142,7 @@ describe('Native libmbus node-module Serial test ...', function() {
                                     console.log(new Date().toString() + ': mbus-Serial-Master Close: ' + mbusMaster.close());
                                     server.close(function(err) {
                                         socat.kill();
+                                        console.log('mbus-Serial-Device: Socat killed');
                                         done();
                                     });
                                 }, 1000);
