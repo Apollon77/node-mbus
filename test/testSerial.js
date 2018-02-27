@@ -80,10 +80,10 @@ describe('Native libmbus node-module Serial test ...', function() {
 
             var socat;
             if (!(process.env.APPVEYOR && process.env.APPVEYOR==='True')) {
-                socat = spawn('socat', ['pty,link=/tmp/virtualcom0,raw', 'tcp:127.0.0.1:15001']);
+                socat = spawn('socat', ['-xs', 'pty,link=/tmp/virtualcom0,raw', 'tcp:127.0.0.1:15001']);
             }
             else {
-                socat = spawn(__dirname + '../socat/socat.exe', ['pty,link=\\\\.\\CNCB0,raw', 'tcp:127.0.0.1:15001']);
+                socat = spawn(__dirname + '../socat/socat.exe', ['-xs', 'pty,link=\\\\.\\CNCB0,raw', 'tcp:127.0.0.1:15001']);
             }
             console.log('mbus-Serial-Device: Socat connected');
             socat.stdout.on('data', function(data) {
