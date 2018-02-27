@@ -140,7 +140,7 @@ describe('Native libmbus node-module Serial test ...', function() {
 
                                 setTimeout(function() {
                                     console.log(new Date().toString() + ': mbus-Serial-Master Close: ' + mbusMaster.close());
-                                    socat.kill(SIGKILL);
+                                    socat.kill('SIGKILL');
                                     console.log('mbus-Serial-Device: Socat killed');
                                     setTimeout(function() {
                                         server.close(function(err) {
