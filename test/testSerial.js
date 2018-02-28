@@ -80,10 +80,10 @@ describe('Native libmbus node-module Serial test ...', function() {
 
             var socat;
             if (!(process.env.APPVEYOR && process.env.APPVEYOR==='True')) {
-                socat = spawn('socat', ['-xs', 'pty,link=/tmp/virtualcom0,ispeed=9600,ospeed=9600,raw', 'tcp:127.0.0.1:15001']);
+                socat = spawn('socat', ['-Dxs', 'pty,link=/tmp/virtualcom0,ispeed=9600,ospeed=9600,raw', 'tcp:127.0.0.1:15001']);
             }
             else { // com2tcp.exe --ignore-dsr --baud 57600 \.\COM6 192.168.11.80 11001
-                socat = spawn('C:\\cygwin\\bin\\socat.exe', ['-xs', 'pty,link=\\.\\COM1,ispeed=9600,ospeed=9600,raw', 'tcp:127.0.0.1:15001']);
+                socat = spawn('C:\\cygwin\\bin\\socat.exe', ['-Dxs', 'pty,link=\\.\\COM1,ispeed=9600,ospeed=9600,raw', 'tcp:127.0.0.1:15001']);
             }
             console.log('mbus-Serial-Device: Socat spawned');
             socat.stdout.on('data', function(data) {
@@ -114,7 +114,10 @@ describe('Native libmbus node-module Serial test ...', function() {
                 var mbusMaster = new MbusMaster(mbusOptions);
                 var connectResult = mbusMaster.connect();
                 console.log(new Date().toString() + ': mbus-Serial-Master Open:' + connectResult);
-                if (!connectResult) server.close();
+                if (!connectResult) {
+                    socat.kill('SIGKILL');
+                    server.close();
+                }
                 expect(mbusMaster.mbusMaster.connected).to.be.true;
                 setTimeout(function() {
                     console.log(new Date().toString() + ': mbus-Serial-Master Send "Get 1"');
