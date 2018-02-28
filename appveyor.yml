@@ -15,7 +15,6 @@ install:
   - appveyor DownloadFile https://cygwin.com/setup-x86.exe -FileName C:\cygwin\setup-x86.exe
   - C:\cygwin\setup-x86.exe -qnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup
   - C:\cygwin\setup-x86.exe -qnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup -P socat
-  - C:\cygwin\bin\socat.exe -xs pty,link=\\.\\COM1,ispeed=9600,ospeed=9600,raw tcp:127.0.0.1:15001 & exit 0
   - npm install --debug
   - type C:\projects\node-mbus\build\libmbus.vcxproj & exit 0
 test_script:

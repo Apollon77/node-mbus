@@ -107,7 +107,7 @@ describe('Native libmbus node-module Serial test ...', function() {
                 }
                 else {
                     var mbusOptions = {
-                        serialPort: 'COM1',
+                        serialPort: '\\.\\COM1',
                         serialBaudRate: 9600
                     };
                 }

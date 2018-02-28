@@ -5,6 +5,12 @@
     #define USE_VIRTUAL_SERIALPORT
 #endif
 
+#ifdef _DEBUG
+    #ifndef USE_VIRTUAL_SERIALPORT
+        #define USE_VIRTUAL_SERIALPORT
+    #endif
+#endif
+
 #ifdef _WIN32
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
@@ -175,7 +181,7 @@ NAN_METHOD(MbusMaster::OpenSerial) {
             obj->handle = NULL;
             info.GetReturnValue().Set(Nan::False());
             MBUS_ERROR("%s: Unable to set baudrate.\n", __PRETTY_FUNCTION__);
-            return;
+            //return;
         }
     #endif
     obj->connected = true;
