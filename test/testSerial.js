@@ -112,7 +112,10 @@ describe('Native libmbus node-module Serial test ...', function() {
                     };
                 }
                 var mbusMaster = new MbusMaster(mbusOptions);
-                console.log(new Date().toString() + ': mbus-Serial-Master Open:',mbusMaster.connect());
+                var connectResult = mbusMaster.connect();
+                console.log(new Date().toString() + ': mbus-Serial-Master Open:' + connectResult);
+                if (!connectResult) server.close();
+)
                 expect(mbusMaster.mbusMaster.connected).to.be.true;
                 setTimeout(function() {
                     console.log(new Date().toString() + ': mbus-Serial-Master Send "Get 1"');

@@ -80,7 +80,9 @@ describe('Native libmbus node-module TCP test ...', function() {
                 port: port
             };
             var mbusMaster = new MbusMaster(mbusOptions);
-            console.log(new Date().toString() + ': mbus-TCP-Master Open:',mbusMaster.connect());
+            var connectResult = mbusMaster.connect();
+            console.log(new Date().toString() + ': mbus-TCP-Master Open:' + connectResult);
+            if (!connectResult) server.close();
             expect(mbusMaster.mbusMaster.connected).to.be.true;
             setTimeout(function() {
                 console.log(new Date().toString() + ': mbus-TCP-Master Send "Get 1"');
