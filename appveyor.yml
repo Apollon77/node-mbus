@@ -17,8 +17,6 @@ install:
   - C:\cygwin\setup-x86.exe -qnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup -P socat
   - npm install --debug
   - type C:\projects\node-mbus\build\libmbus.vcxproj & exit 0
-  - cd C:\projects\node-mbus
-  - npm run clean
 test_script:
   - node --version
   - npm --version
