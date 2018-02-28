@@ -83,7 +83,7 @@ describe('Native libmbus node-module Serial test ...', function() {
                 socat = spawn('socat', ['-Dxs', 'pty,link=/tmp/virtualcom0,ispeed=9600,ospeed=9600,raw', 'tcp:127.0.0.1:15001']);
             }
             else { // com2tcp.exe --ignore-dsr --baud 57600 \.\COM6 192.168.11.80 11001
-                socat = spawn('C:\\cygwin\\bin\\socat.exe', ['-Dxs', 'pty,link=COM1,ispeed=9600,ospeed=9600,raw', 'tcp:127.0.0.1:15001']);
+                socat = spawn('C:\\cygwin\\bin\\socat.exe', ['-Dxs', 'pty,link=/dev/ttyS0,ispeed=9600,ospeed=9600,raw', 'tcp:127.0.0.1:15001']);
             }
             console.log('mbus-Serial-Device: Socat spawned');
             socat.stdout.on('data', function(data) {
