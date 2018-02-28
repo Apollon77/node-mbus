@@ -25,14 +25,7 @@
             ],
             'dependencies': [
                 'libmbus'
-            ],
-            'configurations': {
-                'Debug': {
-                    'defines': [ 'DEBUG', '_DEBUG', 'USE_VIRTUAL_SERIALPORT=1' ],
-                },
-                'Release': {
-                }
-            }
+            ]
 		},
 		{
 			'target_name': 'libmbus',

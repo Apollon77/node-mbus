@@ -1,6 +1,10 @@
 #include "mbus-master.h"
 #include "util.h"
 
+#ifdef DEBUG
+    #define USE_VIRTUAL_SERIALPORT
+#endif
+
 #ifdef _WIN32
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
