@@ -14,8 +14,9 @@ before_install:
   - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./cc-test-reporter before-build; fi'
   - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi'
   - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install socat; fi'
-before_script:
-  - node-gyp rebuild --debug
+install:
+  - npm install
+  - npm run install -- --debug
 after_success:
   - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT -r 22e3e060ccffa9ceda43fcdcca5445251fe4f93cf4a98547a76f7897a6b1b877; fi'
 addons:
