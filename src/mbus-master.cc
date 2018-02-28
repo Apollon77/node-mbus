@@ -163,7 +163,6 @@ NAN_METHOD(MbusMaster::OpenSerial) {
     {
         free(port);
         info.GetReturnValue().Set(Nan::False());
-        MBUS_ERROR("%s: Unable to get handle.\n", __PRETTY_FUNCTION__);
         return;
     }
     free(port);
