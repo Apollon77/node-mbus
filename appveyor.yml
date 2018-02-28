@@ -13,7 +13,7 @@ install:
   - git clone -b build-windows --single-branch https://github.com/Apollon77/libmbus.git libmbus
   - cp config.h libmbus/config.h
   - appveyor DownloadFile https://cygwin.com/setup-x86.exe -FileName C:\cygwin\setup-x86.exe
-  - C:\cygwin\setup-x86.exe -qnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup
+  - C:\cygwin\setup-x86.exe -qnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup -P socat-1.7.3.1-1
   - npm install
 test_script:
   - type C:\projects\node-mbus\build\libmbus.vcxproj & exit 0
