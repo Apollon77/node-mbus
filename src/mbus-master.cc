@@ -1,6 +1,7 @@
 #include "mbus-master.h"
 #include "util.h"
 
+/*
 #ifdef DEBUG
     #define USE_VIRTUAL_SERIALPORT
 #endif
@@ -10,6 +11,7 @@
         #define USE_VIRTUAL_SERIALPORT
     #endif
 #endif
+*/
 
 #ifdef _WIN32
 #define __PRETTY_FUNCTION__ __FUNCSIG__
@@ -174,18 +176,18 @@ NAN_METHOD(MbusMaster::OpenSerial) {
       MBUS_ERROR("%s: Unable to connect.\n", __PRETTY_FUNCTION__);
       return;
     }
-    #ifndef USE_VIRTUAL_SERIALPORT
-    MBUS_ERROR("%s: BAUDRATE SET\n", __PRETTY_FUNCTION__);
-        if (mbus_serial_set_baudrate(obj->handle, boudrate) == -1)
-        {
-            mbus_disconnect(obj->handle);
-            mbus_context_free(obj->handle);
-            obj->handle = NULL;
-            info.GetReturnValue().Set(Nan::False());
-            MBUS_ERROR("%s: Unable to set baudrate.\n", __PRETTY_FUNCTION__);
-            return;
-        }
-    #endif
+//    #ifndef USE_VIRTUAL_SERIALPORT
+//    MBUS_ERROR("%s: BAUDRATE SET\n", __PRETTY_FUNCTION__);
+    if (mbus_serial_set_baudrate(obj->handle, boudrate) == -1)
+    {
+        mbus_disconnect(obj->handle);
+        mbus_context_free(obj->handle);
+        obj->handle = NULL;
+        info.GetReturnValue().Set(Nan::False());
+        MBUS_ERROR("%s: Unable to set baudrate.\n", __PRETTY_FUNCTION__);
+        return;
+    }
+//    #endif
     obj->connected = true;
     info.GetReturnValue().Set(Nan::True());
     return;
