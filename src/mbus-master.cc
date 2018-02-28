@@ -156,12 +156,14 @@ NAN_METHOD(MbusMaster::OpenSerial) {
       break;
   }
 
+  MBUS_ERROR("%s: TEST\n", __PRETTY_FUNCTION__);
   if(!obj->connected) {
     obj->serial = true;
     if (!(obj->handle = mbus_context_serial(port)))
     {
         free(port);
         info.GetReturnValue().Set(Nan::False());
+        MBUS_ERROR("%s: Unable to get handle.\n", __PRETTY_FUNCTION__);
         return;
     }
     free(port);
@@ -181,7 +183,7 @@ NAN_METHOD(MbusMaster::OpenSerial) {
             obj->handle = NULL;
             info.GetReturnValue().Set(Nan::False());
             MBUS_ERROR("%s: Unable to set baudrate.\n", __PRETTY_FUNCTION__);
-            //return;
+            return;
         }
     #endif
     obj->connected = true;
