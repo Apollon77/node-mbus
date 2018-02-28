@@ -175,6 +175,7 @@ NAN_METHOD(MbusMaster::OpenSerial) {
       return;
     }
     #ifndef USE_VIRTUAL_SERIALPORT
+    MBUS_ERROR("%s: BAUDRATE SET\n", __PRETTY_FUNCTION__);
         if (mbus_serial_set_baudrate(obj->handle, boudrate) == -1)
         {
             mbus_disconnect(obj->handle);
