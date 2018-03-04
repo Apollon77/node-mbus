@@ -23,7 +23,7 @@ The library is based on the great work of samkrew (https://github.com/samkrew) w
 ## Usage example
 
 ```
-var MbusMaster = require('../index.js');
+var MbusMaster = require('node-mbus');
 
 var mbusOptions = {
     host: '127.0.0.1',

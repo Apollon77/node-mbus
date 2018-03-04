@@ -121,6 +121,10 @@ MbusMaster.prototype.scanSecondary = function scanSecondary(callback) {
                 }
                 else {
                     data = data.split(',');
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i][0] === '""') data[i] = data[i].substring(1);
+                        if (data[i][data[i].length-1] === '""') data[i] = data[i].substring(0, data[i].length-1);
+                    }
                 }
             }
             if (callback) callback(err, data);
