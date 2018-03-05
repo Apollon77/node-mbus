@@ -452,7 +452,7 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
             if (!handle->found_event)
             {
                 sprintf(buffer,"\"%s\",",matching_mask);
-                data = (char*)realloc(data, strlen(data) + strlen(buffer) + sizeof(char) + 1);
+                data = (char*)realloc(data, strlen(data) + strlen(buffer) + 2*sizeof(char));
                 if(!data) {
                   sprintf(error,"Failed to allocate data");
                   SetErrorMessage(error);
@@ -480,8 +480,8 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
             return;
         }
     }
-    data[strlen(data) - 2] = ']';
-    data[strlen(data) - 1] = '\0';
+    data[strlen(data) - 1] = ']';
+    data[strlen(data)] = '\0';
     uv_rwlock_wrunlock(lock);
   }
 
