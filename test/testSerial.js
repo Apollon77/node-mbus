@@ -62,9 +62,9 @@ describe('Native libmbus node-module Serial test ...', function() {
                     sendBuf = Buffer.from('689292680801723E020005434C1202130000008C1004521200008C1104521200008C2004334477018C21043344770102FDC9FF01ED0002FDDBFF01200002ACFF014F008240ACFF01EEFF02FDC9FF02E70002FDDBFF02230002ACFF0251008240ACFF02F1FF02FDC9FF03E40002FDDBFF03450002ACFF03A0008240ACFF03E0FF02FF68000002ACFF0040018240ACFF00BFFF01FF1304D916', 'hex');
                     sendMessage(socket, sendBuf);
                 }
-                else if (hexData.substring(0, 22) === '680b0b6873fd52ffffff1f' ||
-                         hexData.substring(0, 23) === '680b0b6873fd52ffffff17f' ||
-                         hexData.substring(0, 24) === '680b0b6873fd52ffffff18f') {
+                else if (hexData.substring(0, 23) === '680b0b6873fd52ffffff2ff' || // 17834320B4090107
+                         hexData.substring(0, 23) === '680b0b6873fd52ffffff20f' ||
+                         hexData.substring(0, 23) === '680b0b6873fd52fffff320f') {
                     console.log(new Date().toString() + ':     mbus-Serial-Device: Secondary Scan found');
                     sendBuf = Buffer.from('5E', 'hex');
                     sendMessage(socket, sendBuf);
