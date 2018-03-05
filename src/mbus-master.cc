@@ -143,7 +143,6 @@ NAN_METHOD(MbusMaster::OpenSerial) {
       break;
   }
 
-  MBUS_ERROR("%s: TEST\n", __PRETTY_FUNCTION__);
   if(!obj->connected) {
     obj->serial = true;
     if (!(obj->handle = mbus_context_serial(port)))
@@ -158,7 +157,7 @@ NAN_METHOD(MbusMaster::OpenSerial) {
       mbus_context_free(obj->handle);
       obj->handle = NULL;
       info.GetReturnValue().Set(Nan::False());
-      MBUS_ERROR("%s: Unable to connect.\n", __PRETTY_FUNCTION__);
+      //MBUS_ERROR("%s: Unable to connect.\n", __PRETTY_FUNCTION__);
       return;
     }
 //    #ifndef USE_VIRTUAL_SERIALPORT
@@ -169,7 +168,7 @@ NAN_METHOD(MbusMaster::OpenSerial) {
         mbus_context_free(obj->handle);
         obj->handle = NULL;
         info.GetReturnValue().Set(Nan::False());
-        MBUS_ERROR("%s: Unable to set baudrate.\n", __PRETTY_FUNCTION__);
+        //MBUS_ERROR("%s: Unable to set baudrate.\n", __PRETTY_FUNCTION__);
         return;
     }
 //    #endif
