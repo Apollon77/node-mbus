@@ -124,7 +124,7 @@ MbusMaster.prototype.scanSecondary = function scanSecondary(callback) {
                         data = JSON.parse(data);
                     }
                     catch (e) {
-                        err = e;
+                        err = e + ': ' + data;
                         data = null;
                     }
                 }
