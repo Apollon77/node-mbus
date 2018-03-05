@@ -18,8 +18,6 @@ This library provides access to selected functions of the libmbus (https://githu
 
 The library is based on the great work of samkrew (https://github.com/samkrew) which developed the basis of this module for node 0.x.
 
-***The Library is only available for Linux and MacOS!***
-
 ## Usage example
 
 ```
@@ -164,10 +162,9 @@ The callback is called with an *error* and *scanResult* parameter. The scan resu
 
 ## Todo
 * Also build the libmbus binaries and tools? (if needed)
-* Upgrade to nan 2.9 (fix deprecation warnings before)
 * real life tests
 
 ## Changelog
 
-### v0.0.1 (2018.02.xx)
+### v0.1.0 (2018.03.05)
 * initial version

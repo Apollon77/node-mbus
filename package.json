@@ -1,6 +1,6 @@
 {
   "name": "node-mbus",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "libmbus binding",
   "keywords": [
     "mbus"
@@ -9,11 +9,6 @@
   "engines": {
     "node": ">= 4"
   },
-  "os": [
-    "darwin",
-    "linux",
-    "win32"
-  ],
   "scripts": {
     "prepublish":"rm -rf libmbus && git clone -b build-windows --single-branch https://github.com/Apollon77/libmbus.git libmbus && cp config.h libmbus/config.h",
     "build": "node-gyp build",
