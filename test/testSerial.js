@@ -29,6 +29,12 @@ describe('Native libmbus node-module Serial test ...', function() {
     it('Test Reading Serial', function (done) {
         this.timeout(150000); // because of first install from npm
 
+        if (process.env.APPVEYOR && process.env.APPVEYOR==='True') {
+            console.log('Serial testing not possible on Appveyor ... skipping');
+            done();
+            return;
+        }
+
         var server = net.createServer(function(socket) {
             console.log(new Date().toString() + ': mbus-Serial-Device: Connected ' + port + '!');
 
