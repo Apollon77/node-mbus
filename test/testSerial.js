@@ -49,12 +49,12 @@ describe('Native libmbus node-module Serial test ...', function() {
                     var device = hexData.substring(4,6);
                     console.log(new Date().toString() + ':     mbus-Serial-Device: Initialization Request ' + device);
                     if (device === "fe" || device === "01" || device === "05") {
-                        sendBuf = Buffer.from('5E', 'hex');
+                        sendBuf = Buffer.from('E5', 'hex');
                         sendMessage(socket, sendBuf);
                     }
                     else if (device === "fd") {
                         if (counterFD%2 === 0) {
-                            sendBuf = Buffer.from('5E', 'hex');
+                            sendBuf = Buffer.from('E5', 'hex');
                             sendMessage(socket, sendBuf);
                         }
                         counterFD++;
@@ -79,7 +79,7 @@ describe('Native libmbus node-module Serial test ...', function() {
                          hexData.substring(0, 23) === '680b0b6873fd521f834320f' ||
                          hexData.substring(0, 23) === '680b0b6873fd5217834320f') {
                     console.log(new Date().toString() + ':     mbus-Serial-Device: Secondary Scan found');
-                    sendBuf = Buffer.from('5E', 'hex');
+                    sendBuf = Buffer.from('E5', 'hex');
                     sendMessage(socket, sendBuf);
                 }
                 else if (hexData.substring(0, 6) === '105bfd') {
