@@ -34,9 +34,9 @@ describe('Native libmbus node-module Serial test ...', function() {
 
             socket.setNoDelay();
 
+            var counterFD = 0;
             socket.on('data', function (data) {
                 var sendBuf;
-                var counterFD = 0;
 
                 if (!data) {
                     console.log(new Date().toString() + ': mbus-Serial-Device: Received empty string!');
