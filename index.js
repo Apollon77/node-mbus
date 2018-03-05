@@ -120,12 +120,12 @@ MbusMaster.prototype.scanSecondary = function scanSecondary(callback) {
                     data = [];
                 }
                 else {
-                    data = data.split(',');
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i][0] === '[') data[i] = data[i].substring(1);
-                        if (data[i][0] === '"') data[i] = data[i].substring(1);
-                        if (data[i][data[i].length-1] === ']') data[i] = data[i].substring(0, data[i].length-1);
-                        if (data[i][data[i].length-1] === '"') data[i] = data[i].substring(0, data[i].length-1);
+                    try {
+                        data = JSON.parse(data);
+                    }
+                    catch (e) {
+                        err = e;
+                        data = null;
                     }
                 }
             }
