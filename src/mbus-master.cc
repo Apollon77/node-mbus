@@ -1,25 +1,8 @@
 #include "mbus-master.h"
 #include "util.h"
 
-/*
-#ifdef DEBUG
-    #define USE_VIRTUAL_SERIALPORT
-#endif
-
-#ifdef _DEBUG
-    #ifndef USE_VIRTUAL_SERIALPORT
-        #define USE_VIRTUAL_SERIALPORT
-    #endif
-#endif
-*/
-
 #ifdef _WIN32
-#ifndef __PRETTY_FUNCTION__
 #define __PRETTY_FUNCTION__ __FUNCSIG__
-#endif
-#endif
-
-#ifdef _WIN32
 #include <stdlib.h>
 #include <io.h>
 #else
