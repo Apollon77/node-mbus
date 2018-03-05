@@ -452,7 +452,7 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
             if (!handle->found_event)
             {
                 sprintf(buffer,"\"%s\",",matching_mask);
-                data = (char*)realloc(data, strlen(data) + strlen(buffer) + sizeof(char));
+                data = (char*)realloc(data, strlen(data) + strlen(buffer) + sizeof(char) + 1);
                 if(!data) {
                   sprintf(error,"Failed to allocate data");
                   SetErrorMessage(error);
