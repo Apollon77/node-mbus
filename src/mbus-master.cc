@@ -490,6 +490,7 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
   void HandleOKCallback () {
       Nan::HandleScope scope;
 
+    data[strlen(data)-1] = "]";
     Local<Value> argv[] = {
         Nan::Null(),
         Nan::New<String>(data).ToLocalChecked()
