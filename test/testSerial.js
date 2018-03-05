@@ -67,7 +67,9 @@ describe('Native libmbus node-module Serial test ...', function() {
                          hexData.substring(0, 23) === '680b0b6873fd52ffff4f20f' ||
                          hexData.substring(0, 23) === '680b0b6873fd52ffff4320f' ||
                          hexData.substring(0, 23) === '680b0b6873fd52ff8f4320f' ||
-                         hexData.substring(0, 23) === '680b0b6873fd52ff834320f') {
+                         hexData.substring(0, 23) === '680b0b6873fd52ff834320f' ||
+                         hexData.substring(0, 23) === '680b0b6873fd521f834320f' ||
+                         hexData.substring(0, 23) === '680b0b6873fd5217834320f') {
                     console.log(new Date().toString() + ':     mbus-Serial-Device: Secondary Scan found');
                     sendBuf = Buffer.from('5E', 'hex');
                     sendMessage(socket, sendBuf);
