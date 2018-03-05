@@ -24,7 +24,7 @@ function sendMessage(socket, message, callback) {
 describe('Native libmbus node-module TCP test ...', function() {
 
     it('Test Reading TCP', function (done) {
-        this.timeout(150000); // because of first install from npm
+        this.timeout(300000); // because of first install from npm
 
         var server = net.createServer(function(socket) {
             console.log(new Date().toString() + ': mbus-TCP-Device: Connected ' + port + '!');
