@@ -166,5 +166,5 @@ The callback is called with an *error* and *scanResult* parameter. The scan resu
 
 ## Changelog
 
-### v0.1.0 (2018.03.05)
-* initial version
+### v0.1.2 (2018.03.05)
+* initial release

@@ -1,6 +1,6 @@
 {
   "name": "node-mbus",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "libmbus binding",
   "keywords": [
     "mbus"
@@ -10,7 +10,7 @@
     "node": ">= 4"
   },
   "scripts": {
-    "prepublish":"rm -rf libmbus && git clone -b build-windows --single-branch https://github.com/Apollon77/libmbus.git libmbus && cp config.h libmbus/config.h",
+    "prepublish":"rm -rf libmbus && git clone -b build-windows --single-branch https://github.com/Apollon77/libmbus.git libmbus && rm libmbus/.gitignore && cp config.h libmbus/config.h",
     "build": "node-gyp build",
     "install": "node-gyp rebuild",
     "test": "node node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec"
