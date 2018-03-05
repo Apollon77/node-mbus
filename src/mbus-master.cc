@@ -480,6 +480,7 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
             return;
         }
     }
+    data[strlen(data) - 2] = ']';
     data[strlen(data) - 1] = '\0';
     uv_rwlock_wrunlock(lock);
   }
@@ -490,7 +491,6 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
   void HandleOKCallback () {
       Nan::HandleScope scope;
 
-    (char*)(data)[strlen(data)-1] = ']';
     Local<Value> argv[] = {
         Nan::Null(),
         Nan::New<String>(data).ToLocalChecked()
