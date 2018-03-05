@@ -1,4 +1,3 @@
 test
-./.travis.yml
-./appveyor.yml
-./config.h
+.travis.yml
+appveyor.yml
