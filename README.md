@@ -1,6 +1,6 @@
 # node-mbus
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/Apollon77/dnode-mbus.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/Apollon77/node-mbus.svg)](https://greenkeeper.io/)
 [![NPM version](http://img.shields.io/npm/v/node-mbus.svg)](https://www.npmjs.com/package/node-mbus)
 [![Downloads](https://img.shields.io/npm/dm/node-mbus.svg)](https://www.npmjs.com/package/node-mbus)
 [![Dependency Status](https://gemnasium.com/badges/github.com/Apollon77/node-mbus.svg)](https://gemnasium.com/github.com/Apollon77/node-mbus)
