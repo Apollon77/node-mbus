@@ -70,21 +70,14 @@ describe('Native libmbus node-module Serial test ...', function() {
                     sendBuf = Buffer.from('689292680801723E020005434C1202130000008C1004521200008C1104521200008C2004334477018C21043344770102FDC9FF01ED0002FDDBFF01200002ACFF014F008240ACFF01EEFF02FDC9FF02E70002FDDBFF02230002ACFF0251008240ACFF02F1FF02FDC9FF03E40002FDDBFF03450002ACFF03A0008240ACFF03E0FF02FF68000002ACFF0040018240ACFF00BFFF01FF1304D916', 'hex');
                     sendMessage(socket, sendBuf);
                 }
-                else if (hexData.substring(0, 23) === '680b0b6873fd52ffffff2ff' || // 17834320B4090107
-                         hexData.substring(0, 23) === '680b0b6873fd52ffffff20f' ||
-                         hexData.substring(0, 23) === '680b0b6873fd52ffff4f20f' ||
-                         hexData.substring(0, 23) === '680b0b6873fd52ffff4320f' ||
-                         hexData.substring(0, 23) === '680b0b6873fd52ff8f4320f' ||
-                         hexData.substring(0, 23) === '680b0b6873fd52ff834320f' ||
-                         hexData.substring(0, 23) === '680b0b6873fd521f834320f' ||
-                         hexData.substring(0, 23) === '680b0b6873fd5217834320f') {
+                else if (hexData.substring(0, 23) === '680b0b6873fd52ffffff1ff') {
                     console.log(new Date().toString() + ':     mbus-Serial-Device: Secondary Scan found');
                     sendBuf = Buffer.from('E5', 'hex');
                     sendMessage(socket, sendBuf);
                 }
                 else if (hexData.substring(0, 6) === '105bfd') {
-                    console.log(new Date().toString() + ':     mbus-Serial-Device: Request for Class 2 Data ID 2');
-                    sendBuf = Buffer.from('6815156808017220438317b40901072b0000000c13180000009f16 ', 'hex');
+                    console.log(new Date().toString() + ':     mbus-Serial-Device: Request for Class 2 Data ID FD');
+                    sendBuf = Buffer.from('6815156808017220438317b40901072b0000000c13180000009f16', 'hex');
                     sendMessage(socket, sendBuf);
                 }
                 lastMessage = hexData;
