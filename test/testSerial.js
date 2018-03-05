@@ -53,11 +53,11 @@ describe('Native libmbus node-module Serial test ...', function() {
                         sendMessage(socket, sendBuf);
                     }
                     else if (device === "fd") {
-                        counterFD++;
                         if (counterFD%2 === 0) {
                             sendBuf = Buffer.from('5E', 'hex');
                             sendMessage(socket, sendBuf);
                         }
+                        counterFD++;
                     }
                 }
                 else if (hexData.substring(0, 6) === '105b01') {
