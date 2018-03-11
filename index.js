@@ -5,6 +5,7 @@
 'use strict';
 
 var mbusBinding = require('bindings')('mbus');
+var xmlParser = require('xml2js');
 
 function MbusMaster(options) {
     this.options = options;
@@ -90,7 +91,14 @@ MbusMaster.prototype.getData = function getData(address, callback) {
         self.mbusMaster.get(address, function(err, data) {
             if (!err && data) {
                 try {
-                    data = JSON.parse(data).MBusData;
+                    //data = JSON.parse(data).MBusData;
+                    xmlParser.parseString(data, function (err, result) {
+                        if (!err) {
+                            result = result.MBusData;
+                        }
+                        if (callback) callback(err, result);
+                    });
+                    return;
                 }
                 catch (e) {
                     err = e;

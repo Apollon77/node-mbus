@@ -312,11 +312,11 @@ class RecieveWorker : public Nan::AsyncWorker {
     }
 
     //
-    // generate JSON
+    // generate XML
     //
-    if ((data = mbus_frame_data_json(&reply_data)) == NULL)
+    if ((data = mbus_frame_data_xml(&reply_data)) == NULL)
     {
-        sprintf(error, "Failed to generate JSON representation of MBUS frame [%s].", addr_str);
+        sprintf(error, "Failed to generate XML representation of MBUS frame [%s].", addr_str);
         SetErrorMessage(error);
         //uv_rwlock_wrunlock(lock);
         //return;
