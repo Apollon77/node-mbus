@@ -92,6 +92,10 @@ MbusMaster.prototype.getData = function getData(address, callback) {
             if (!err && data) {
                 try {
                     //data = JSON.parse(data).MBusData;
+                    var parserOpt =  {
+                        explicitArray: false,
+                        mergeAttrs: true
+                    };
                     xmlParser.parseString(data, function (err, result) {
                         if (!err) {
                             result = result.MBusData;
