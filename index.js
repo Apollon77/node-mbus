@@ -90,24 +90,18 @@ MbusMaster.prototype.getData = function getData(address, callback) {
         }
         self.mbusMaster.get(address, function(err, data) {
             if (!err && data) {
-                try {
-                    //data = JSON.parse(data).MBusData;
-                    var parserOpt =  {
-                        explicitArray: false,
-                        mergeAttrs: true
-                    };
-                    xmlParser.parseString(data, parserOpt, function (err, result) {
-                        if (!err) {
-                            result = result.MBusData;
-                        }
-                        if (callback) callback(err, result);
-                    });
-                    return;
-                }
-                catch (e) {
-                    err = e;
-                    data = null;
-                }
+                //data = JSON.parse(data).MBusData;
+                var parserOpt =  {
+                    explicitArray: false,
+                    mergeAttrs: true
+                };
+                xmlParser.parseString(data, parserOpt, function (err, result) {
+                    if (!err) {
+                        result = result.MBusData;
+                    }
+                    if (callback) callback(err, result);
+                });
+                return;
             }
             if (callback) callback(err, data);
         });
