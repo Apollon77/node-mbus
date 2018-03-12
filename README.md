@@ -78,16 +78,16 @@ Data example:
     "ProductName": "Itron BM +m",
     "Medium": "Cold water",
     "AccessNumber": 41,
-    "Status": "00",
-    "Signature": "0000"
+    "Status": 0,
+    "Signature": 0
   },
-  "DataRecords": [
+  "DataRecord": [
     {
       "id": 0,
       "Function": "Instantaneous value",
       "StorageNumber": 0,
       "Unit": "Fabrication number",
-      "Value": "11490378",
+      "Value": 11490378,
       "Timestamp": "2018-02-24T22:17:01"
     },
     {
@@ -95,7 +95,7 @@ Data example:
       "Function": "Instantaneous value",
       "StorageNumber": 0,
       "Unit": "Volume (m m^3)",
-      "Value": "54321",
+      "Value": 54321,
       "Timestamp": "2018-02-24T22:17:01"
     },
     {
@@ -111,7 +111,7 @@ Data example:
       "Function": "Instantaneous value",
       "StorageNumber": 1,
       "Unit": "Volume (m m^3)",
-      "Value": "0",
+      "Value": 0,
       "Timestamp": "2018-02-24T22:17:01"
     },
     {
@@ -127,7 +127,7 @@ Data example:
       "Function": "Instantaneous value",
       "StorageNumber": 0,
       "Unit": "Operating time (days)",
-      "Value": "0",
+      "Value": 0,
       "Timestamp": "2018-02-24T22:17:01"
     },
     {
@@ -135,7 +135,7 @@ Data example:
       "Function": "Instantaneous value",
       "StorageNumber": 0,
       "Unit": "Firmware version",
-      "Value": "2",
+      "Value": 2,
       "Timestamp": "2018-02-24T22:17:01"
     },
     {
@@ -143,7 +143,7 @@ Data example:
       "Function": "Instantaneous value",
       "StorageNumber": 0,
       "Unit": "Software version",
-      "Value": "6",
+      "Value": 6,
       "Timestamp": "2018-02-24T22:17:01"
     },
     {
@@ -167,7 +167,7 @@ The callback is called with an *error* and *scanResult* parameter. The scan resu
 ## Changelog
 
 ### v0.2.x (2018.03.11)
-* change to XML mbus methods and parse result to JSON
+* change to XML mbus methods "under the hood" and parse result to JSON
 
 ### v0.1.x (2018.03.06)
 * initial release
