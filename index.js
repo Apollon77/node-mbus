@@ -96,7 +96,7 @@ MbusMaster.prototype.getData = function getData(address, callback) {
                         explicitArray: false,
                         mergeAttrs: true
                     };
-                    xmlParser.parseString(data, function (err, result) {
+                    xmlParser.parseString(data, parserOpt, function (err, result) {
                         if (!err) {
                             result = result.MBusData;
                         }
