@@ -133,7 +133,7 @@ describe('Native libmbus node-module Serial test ...', function() {
                 }
                 else {
                     var mbusOptions = {
-                        serialPort: 'CNCB0',
+                        serialPort: '\\\\.\\CNCB0',
                         serialBaudRate: 9600
                     };
                 }
