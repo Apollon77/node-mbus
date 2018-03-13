@@ -106,8 +106,8 @@ describe('Native libmbus node-module Serial test ...', function() {
             if (!(process.env.APPVEYOR && process.env.APPVEYOR==='True')) {
                 socat = spawn('socat', ['-Dxs', 'pty,link=/tmp/virtualcom0,ispeed=9600,ospeed=9600,raw', 'tcp:127.0.0.1:15001']);
             }
-            else { // com2tcp.exe --ignore-dsr --baud 57600 \.\COM6 192.168.11.80 11001
-                socat = spawn('C:\\cygwin\\bin\\socat.exe', ['-Dxs', 'pty,link=\\\\.\\SER1,ispeed=9600,ospeed=9600,raw', 'tcp:127.0.0.1:15001']);
+            else { // for manual tests use com0com to create a virtual COM pair and com2tcp to direct one side to tcp
+                socat = spawn('C:\\com2tcp.exe', ['--ignore-dsr', '--baud', '9600', '--parity', 'e', '\\.\\COM6', '127.0.0.1', '15001']);
             }
             console.log('mbus-Serial-Device: Socat spawned');
             socat.stdout.on('data', function(data) {
@@ -131,7 +131,7 @@ describe('Native libmbus node-module Serial test ...', function() {
                 }
                 else {
                     var mbusOptions = {
-                        serialPort: 'SER1',
+                        serialPort: 'COM5',
                         serialBaudRate: 9600
                     };
                 }
