@@ -35,10 +35,12 @@ describe('Native libmbus node-module Serial test ...', function() {
             return;
         }
 
+        var testSocket;
         var server = net.createServer(function(socket) {
             console.log(new Date().toString() + ': mbus-Serial-Device: Connected ' + port + '!');
 
             socket.setNoDelay();
+            testSocket = socket;
 
             var counterFD = 0;
             socket.on('data', function (data) {
@@ -140,6 +142,7 @@ describe('Native libmbus node-module Serial test ...', function() {
                 console.log(new Date().toString() + ': mbus-Serial-Master Open:' + connectResult);
                 if (!connectResult) {
                     socat.kill('SIGKILL');
+                    testSocket.destroy();
                     server.close();
                 }
                 expect(mbusMaster.mbusMaster.connected).to.be.true;
@@ -174,6 +177,7 @@ describe('Native libmbus node-module Serial test ...', function() {
                                     console.log('mbus-Serial-Device: Socat killed');
                                     setTimeout(function() {
                                         server.close(function(err) {
+                                            testSocket.destroy();
                                             console.log('mbus-Serial-Device: Server closed');
                                             setTimeout(done, 2000);
                                         });

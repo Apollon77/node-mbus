@@ -26,10 +26,12 @@ describe('Native libmbus node-module TCP test ...', function() {
     it('Test Reading TCP', function (done) {
         this.timeout(300000); // because of first install from npm
 
+        var testSocket;
         var server = net.createServer(function(socket) {
             console.log(new Date().toString() + ': mbus-TCP-Device: Connected ' + port + '!');
 
             socket.setNoDelay();
+            testSocket = socket;
 
             socket.on('data', function (data) {
                 var sendBuf;
@@ -130,6 +132,7 @@ describe('Native libmbus node-module TCP test ...', function() {
                             setTimeout(function() {
                                 console.log(new Date().toString() + ': mbus-TCP-Master Close: ' + mbusMaster.close());
                                 server.close(function() {
+                                    testSocket.destroy();
                                     done();
                                 });
                             }, 1000);
