@@ -14,7 +14,7 @@ install:
   - ps: C:\"Program Files"\"Microsoft SDKs"\Windows\v7.1\Bin\CertMgr.exe /add com0com.cer /s /r localMachine trustedpublisher
   - ps: Start-FileDownload https://github.com/Apollon77/SupportingFiles/raw/master/appveyor/serial/Setup_com0com_v3.0.0.0_W7_x64_signed.exe
   - ps: $env:CNC_INSTALL_CNCA0_CNCB0_PORTS="YES"
-  - ps: .\setup_com0com_W7_x64_signed.exe /S
+  - ps: .\Setup_com0com_v3.0.0.0_W7_x64_signed.exe /S
   - ps: sleep 60
   - ps: Start-FileDownload https://github.com/Apollon77/SupportingFiles/raw/master/appveyor/serial/com2tcp.exe
   - ps: 'Install-Product node $env:nodejs_version $env:platform'
