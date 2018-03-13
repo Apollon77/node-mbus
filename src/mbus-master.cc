@@ -420,7 +420,7 @@ class ScanSecondaryWorker : public Nan::AsyncWorker {
         return;
     }
 
-    data = strdup("[");
+    data = strdup("[ ");
 
     for (i = i_start; i <= i_end; i++)
     {
