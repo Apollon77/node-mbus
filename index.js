@@ -101,6 +101,9 @@ MbusMaster.prototype.getData = function getData(address, callback) {
                     if (!err) {
                         result = result.MBusData;
                     }
+                    if (result.DataRecord && !Array.isArray(result.DataRecord)) {
+                        result.DataRecord = [result.DataRecord];
+                    }
                     if (callback) callback(err, result);
                 });
                 return;
