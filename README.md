@@ -26,7 +26,7 @@ var MbusMaster = require('node-mbus');
 var mbusOptions = {
     host: '127.0.0.1',
     port: port,
-    autoConenct: true
+    autoConnect: true
 };
 var mbusMaster = new MbusMaster(mbusOptions);
 
