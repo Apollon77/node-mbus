@@ -4,13 +4,13 @@ var MbusMaster = require('../index.js');
 var mbusOptions = {
     host: '127.0.0.1',
     port: port,
-    autoConenct: true
+    autoConnect: true
 };
 */
 var mbusOptions = {
     serialPort: 'COM9',
     serialBaudRate: 2400,
-    autoConenct: true
+    autoConnect: true
 };
 
 var mbusMaster = new MbusMaster(mbusOptions);
