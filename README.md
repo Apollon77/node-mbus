@@ -166,6 +166,9 @@ The callback is called with an *error* and *scanResult* parameter. The scan resu
 
 ## Changelog
 
+### v0.3.0 (2018.03.15)
+* official release
+
 ### v0.2.x (2018.03.11)
 * change to XML mbus methods "under the hood" and parse result to JSON
 
