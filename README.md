@@ -20,7 +20,7 @@ The library is based on the great work of samkrew (https://github.com/samkrew) w
 
 ## Usage example
 
-```
+```javascript
 var MbusMaster = require('node-mbus');
 
 var mbusOptions = {
@@ -44,6 +44,20 @@ mbusMaster.getData(1, function(err, data) {
 ## Usage informations
 
 ...
+
+## Testing
+
+Go to module directory and run one of this command with your own connection parameters:
+
+```bash
+
+# Serial connection
+node ./example/example.js -serialPort /dev/ttyUSB0 -serialBaudrate 9600 -autoConnect true
+
+# TCP connection
+node ./example/example.js -host 127.0.0.1 -port 2000 -autoConnect true
+
+```
 
 ## Method description
 
@@ -69,7 +83,7 @@ This method is requesting "Class 2 Data" from the device with the given *address
 The callback is called with an *error* and *data* parameter. When data are received successfully the *data* parameter contains the data object.
 
 Data example:
-```
+```json
 {
   "SlaveInformation": {
     "Id": 11490378,
