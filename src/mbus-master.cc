@@ -450,7 +450,7 @@ public:
 
         strcpy(mask,"FFFFFFFFFFFFFFFF");
 
-        mbus_register_found_event(handle, &deviceFound);
+        mbus_register_found_event(handle, &ScanSecondaryWorker::deviceFound);
 
         memset((void *)&reply, 0, sizeof(mbus_frame));
 
@@ -473,7 +473,7 @@ public:
 
         data = strdup("[ ");
 
-        int ret = mbus_scan_2nd_address_range(handle, 0, addr_mask);
+        int ret = mbus_scan_2nd_address_range(handle, 0, mask);
 
         if (ret == -1)
         {
