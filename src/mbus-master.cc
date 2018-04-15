@@ -425,8 +425,8 @@ public:
     }
 
     void deviceFound(mbus_handle *handle, mbus_frame *frame) {
-        char *addr = mbus_frame_get_secondary_address(&frame);
-        char *matching_addr = strdup("FFFFFFFFFFFFFFFF");
+        char buffer[22], matching_addr[17];
+        char *addr = mbus_frame_get_secondary_address(frame);
 
         snprintf(matching_addr, 17, "%s", addr);
 
@@ -446,9 +446,7 @@ public:
 
         mbus_frame *frame = NULL, reply;
         char error[100];
-        int i, i_start = 0, i_end = 9, probe_ret;
-        char mask[17], matching_mask[17], buffer[22];
-        int pos = 0;
+        char mask[17];
 
         strcpy(mask,"FFFFFFFFFFFFFFFF");
 
