@@ -424,6 +424,19 @@ public:
     ~ScanSecondaryWorker() {
     }
 
+    void deviceFound(mbus_handle *handle, mbus_frame *frame) {
+        char *addr = mbus_frame_get_secondary_address(&frame);
+        char *matching_addr = strdup("FFFFFFFFFFFFFFFF");
+
+        snprintf(matching_addr, 17, "%s", addr);
+
+        sprintf(buffer,"\"%s\",",matching_addr);
+        data = (char*)realloc(data, strlen(data) + strlen(buffer) + 2*sizeof(char));
+        if (data) {
+            strcat(data,buffer);
+        }
+    }
+
     // Executed inside the worker-thread.
     // It is not safe to access V8, or V8 data structures
     // here, so everything we need for input and output
@@ -438,6 +451,8 @@ public:
         int pos = 0;
 
         strcpy(mask,"FFFFFFFFFFFFFFFF");
+
+        mbus_register_found_event(handle, &deviceFound);
 
         memset((void *)&reply, 0, sizeof(mbus_frame));
 
@@ -460,47 +475,15 @@ public:
 
         data = strdup("[ ");
 
-        for (i = i_start; i <= i_end; i++)
+        int ret = mbus_scan_2nd_address_range(handle, 0, addr_mask);
+
+        if (ret == -1)
         {
-            mask[pos] = '0'+i;
-
-            if (handle->scan_progress)
-            handle->scan_progress(handle,mask);
-
-            probe_ret = mbus_probe_secondary_address(handle, mask, matching_mask);
-
-            if (probe_ret == MBUS_PROBE_SINGLE)
-            {
-                if (!handle->found_event)
-                {
-                    sprintf(buffer,"\"%s\",",matching_mask);
-                    data = (char*)realloc(data, strlen(data) + strlen(buffer) + 2*sizeof(char));
-                    if(!data) {
-                        sprintf(error,"Failed to allocate data");
-                        SetErrorMessage(error);
-                        uv_rwlock_wrunlock(lock);
-                        return;
-                    }
-                    strcat(data,buffer);
-                }
-            }
-            else if (probe_ret == MBUS_PROBE_COLLISION)
-            {
-                // collision, more than one device matching, restrict the search mask further
-                mbus_scan_2nd_address_range(handle, pos+1, mask);
-            }
-            else if (probe_ret == MBUS_PROBE_NOTHING)
-            {
-                // nothing... move on to next address mask
-            }
-            else // MBUS_PROBE_ERROR
-            {
-                sprintf(error,"Failed to probe secondary address [%s]", mask);
-                SetErrorMessage(error);
-                free(data);
-                uv_rwlock_wrunlock(lock);
-                return;
-            }
+            sprintf(error,"Failed to probe secondary address", mask);
+            SetErrorMessage(error);
+            free(data);
+            uv_rwlock_wrunlock(lock);
+            return;
         }
         data[strlen(data) - 1] = ']';
         data[strlen(data)] = '\0';
