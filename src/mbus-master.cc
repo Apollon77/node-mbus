@@ -542,7 +542,7 @@ NAN_METHOD(MbusMaster::Get) {
 //public:
     ScanSecondaryWorker::ScanSecondaryWorker(Nan::Callback *callback,uv_rwlock_t *lock, mbus_handle *handle, bool *communicationInProgress)
     : Nan::AsyncWorker(callback), lock(lock), handle(handle), communicationInProgress(communicationInProgress) {}
-    ~ScanSecondaryWorker::ScanSecondaryWorker() {
+    ScanSecondaryWorker::~ScanSecondaryWorker() {
     }
 
     void ScanSecondaryWorker::DeviceFound(mbus_handle *handle, mbus_frame *frame)
@@ -573,7 +573,7 @@ NAN_METHOD(MbusMaster::Get) {
         strcpy(mask,"FFFFFFFFFFFFFFFF");
 
 
-        mbus_register_found_event(handle, DeviceFoundMemberFunctionCallback(&this, &ScanSecondaryWorker::DeviceFound));
+        mbus_register_found_event(handle, DeviceFoundMemberFunctionCallback(this, &ScanSecondaryWorker::DeviceFound));
 
         memset((void *)&reply, 0, sizeof(mbus_frame));
 
