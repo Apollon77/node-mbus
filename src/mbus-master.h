@@ -34,20 +34,4 @@ private:
     bool serial;
 };
 
-class ScanSecondaryWorker : public Nan::AsyncWorker {
-public:
-    ScanSecondaryWorker(Nan::Callback *callback,uv_rwlock_t *lock, mbus_handle *handle, bool *communicationInProgress);
-    ~ScanSecondaryWorker();
-    void DeviceFound(mbus_handle *handle, mbus_frame *frame);
-    void Execute ();
-    void HandleOKCallback ();
-    void HandleErrorCallback ();
-
-private:
-    char *data;
-    uv_rwlock_t *lock;
-    mbus_handle *handle;
-    bool *communicationInProgress;
-};
-
 #endif

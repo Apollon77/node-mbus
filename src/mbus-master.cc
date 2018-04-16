@@ -14,8 +14,35 @@ using namespace v8;
 Nan::Persistent<v8::FunctionTemplate> MbusMaster::constructor;
 
 
+
+
+class ScanSecondaryDatastore
+{
+public:
+	ScanSecondaryDatastore(char *data)
+		:	data(data)
+	{
+	}
+
+	void DeviceFound(mbus_handle *handle, mbus_frame *frame)
+	{
+		char buffer[22], matching_addr[17];
+        char *addr = mbus_frame_get_secondary_address(frame);
+
+        snprintf(matching_addr, 17, "%s", addr);
+
+        sprintf(buffer,"\"%s\",",matching_addr);
+        data = (char*)realloc(data, strlen(data) + strlen(buffer) + 2*sizeof(char));
+        if (data) {
+            strcat(data,buffer);
+        }
+	}
+private:
+	char *data;
+};
+
 typedef void (*LPFN_DeviceFoundCCallback)(mbus_handle *handle, mbus_frame *frame);
-typedef void (ScanSecondaryWorker::*LPFN_DeviceFoundMemberFunctionCallback)(mbus_handle *handle, mbus_frame *frame);
+typedef void (ScanSecondaryDatastore::*LPFN_DeviceFoundMemberFunctionCallback)(mbus_handle *handle, mbus_frame *frame);
 
 // this object holds the state for a C++ member function callback in memory
 class DeviceFoundCallbackBase
@@ -37,7 +64,7 @@ public:
 	}
 
 	// when free, allocate this callback
-	LPFN_DeviceFoundCCallback Reserve(ScanSecondaryWorker* instance, LPFN_DeviceFoundMemberFunctionCallback method)
+	LPFN_DeviceFoundCCallback Reserve(ScanSecondaryDatastore* instance, LPFN_DeviceFoundMemberFunctionCallback method)
 	{
 		if( m_pClass )
 			return NULL;
@@ -52,7 +79,7 @@ protected:
 
 private:
 	LPFN_DeviceFoundCCallback m_pCCallback;
-	ScanSecondaryWorker* m_pClass;
+	ScanSecondaryDatastore* m_pClass;
 	LPFN_DeviceFoundMemberFunctionCallback m_pMethod;
 };
 
@@ -74,7 +101,7 @@ private:
 class DeviceFoundMemberFunctionCallback
 {
 public:
-	DeviceFoundMemberFunctionCallback(ScanSecondaryWorker* instance, LPFN_DeviceFoundMemberFunctionCallback method);
+	DeviceFoundMemberFunctionCallback(ScanSecondaryDatastore* instance, LPFN_DeviceFoundMemberFunctionCallback method);
 	~DeviceFoundMemberFunctionCallback();
 
 public:
@@ -107,7 +134,7 @@ void DeviceFoundCallbackBase::StaticInvoke(int context, mbus_handle *handle, mbu
 }
 
 
-DeviceFoundMemberFunctionCallback::DeviceFoundMemberFunctionCallback(ScanSecondaryWorker* instance, LPFN_DeviceFoundMemberFunctionCallback method)
+DeviceFoundMemberFunctionCallback::DeviceFoundMemberFunctionCallback(ScanSecondaryDatastore* instance, LPFN_DeviceFoundMemberFunctionCallback method)
 {
 	int imax = sizeof(AvailableCallbackSlots)/sizeof(AvailableCallbackSlots[0]);
 	for( m_nAllocIndex = 0; m_nAllocIndex < imax; ++m_nAllocIndex )
@@ -545,7 +572,7 @@ NAN_METHOD(MbusMaster::Get) {
     ScanSecondaryWorker::~ScanSecondaryWorker() {
     }
 
-    void ScanSecondaryWorker::DeviceFound(mbus_handle *handle, mbus_frame *frame)
+/*    void ScanSecondaryWorker::DeviceFound(mbus_handle *handle, mbus_frame *frame)
 	{
         MBUS_ERROR("%s: CALLED1.\n", __PRETTY_FUNCTION__);
 		char buffer[22], matching_addr[17];
@@ -563,7 +590,7 @@ NAN_METHOD(MbusMaster::Get) {
             MBUS_ERROR("%s: CALLED5.\n", __PRETTY_FUNCTION__);
         }
         MBUS_ERROR("%s: CALLED6.\n", __PRETTY_FUNCTION__);
-	}
+	}*/
 
     // Executed inside the worker-thread.
     // It is not safe to access V8, or V8 data structures
@@ -577,9 +604,6 @@ NAN_METHOD(MbusMaster::Get) {
         char mask[17];
 
         strcpy(mask,"FFFFFFFFFFFFFFFF");
-
-
-        mbus_register_found_event(handle, DeviceFoundMemberFunctionCallback(this, &ScanSecondaryWorker::DeviceFound));
 
         memset((void *)&reply, 0, sizeof(mbus_frame));
 
@@ -601,6 +625,10 @@ NAN_METHOD(MbusMaster::Get) {
         }
 
         data = strdup("[ ");
+
+        ScanSecondaryDatastore datatore(data);
+        mbus_register_found_event(handle, DeviceFoundMemberFunctionCallback(&datatore, &ScanSecondaryDatastore::DeviceFound));
+
 
         int ret = mbus_scan_2nd_address_range(handle, 0, mask);
 
