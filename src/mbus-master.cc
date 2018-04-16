@@ -645,7 +645,7 @@ public:
         //data = strdup("[ ");
 
         ScanSecondaryDatastore datastore();
-        mbus_register_found_event(handle, DeviceFoundMemberFunctionCallback(datastore, &ScanSecondaryDatastore::DeviceFound));
+        mbus_register_found_event(handle, DeviceFoundMemberFunctionCallback(&datastore, &ScanSecondaryDatastore::DeviceFound));
 
 
         int ret = mbus_scan_2nd_address_range(handle, 0, mask);
