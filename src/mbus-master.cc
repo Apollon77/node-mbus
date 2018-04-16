@@ -26,16 +26,22 @@ public:
 
 	void DeviceFound(mbus_handle *handle, mbus_frame *frame)
 	{
+        MBUS_ERROR("%s: CALLED1.\n", __PRETTY_FUNCTION__);
 		char buffer[22], matching_addr[17];
+        MBUS_ERROR("%s: CALLED2.\n", __PRETTY_FUNCTION__);
         char *addr = mbus_frame_get_secondary_address(frame);
 
         snprintf(matching_addr, 17, "%s", addr);
 
         sprintf(buffer,"\"%s\",",matching_addr);
+        MBUS_ERROR("%s: CALLED3.\n", __PRETTY_FUNCTION__);
         data = (char*)realloc(data, strlen(data) + strlen(buffer) + 2*sizeof(char));
         if (data) {
+            MBUS_ERROR("%s: CALLED4.\n", __PRETTY_FUNCTION__);
             strcat(data,buffer);
+            MBUS_ERROR("%s: CALLED5.\n", __PRETTY_FUNCTION__);
         }
+        MBUS_ERROR("%s: CALLED6.\n", __PRETTY_FUNCTION__);
 	}
 private:
 	char *data;
