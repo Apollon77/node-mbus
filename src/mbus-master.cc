@@ -565,11 +565,11 @@ NAN_METHOD(MbusMaster::Get) {
     info.GetReturnValue().SetUndefined();
 }
 
-//class ScanSecondaryWorker : public Nan::AsyncWorker {
-//public:
-    ScanSecondaryWorker::ScanSecondaryWorker(Nan::Callback *callback,uv_rwlock_t *lock, mbus_handle *handle, bool *communicationInProgress)
+class ScanSecondaryWorker : public Nan::AsyncWorker {
+public:
+    ScanSecondaryWorker(Nan::Callback *callback,uv_rwlock_t *lock, mbus_handle *handle, bool *communicationInProgress)
     : Nan::AsyncWorker(callback), lock(lock), handle(handle), communicationInProgress(communicationInProgress) {}
-    ScanSecondaryWorker::~ScanSecondaryWorker() {
+    ~ScanSecondaryWorker() {
     }
 
 /*    void ScanSecondaryWorker::DeviceFound(mbus_handle *handle, mbus_frame *frame)
@@ -671,6 +671,13 @@ NAN_METHOD(MbusMaster::Get) {
         };
         callback->Call(1, argv);
     }
+
+private:
+    char *data;
+    uv_rwlock_t *lock;
+    mbus_handle *handle;
+    bool *communicationInProgress;
+};
 
 NAN_METHOD(MbusMaster::ScanSecondary) {
     Nan::HandleScope scope;
