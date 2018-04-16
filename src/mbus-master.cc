@@ -536,8 +536,6 @@ public:
 
         strcpy(mask,"FFFFFFFFFFFFFFFF");
 
-        mbus_register_found_event(handle, &ScanSecondaryWorker::deviceFound);
-
         memset((void *)&reply, 0, sizeof(mbus_frame));
 
         frame = mbus_frame_new(MBUS_FRAME_TYPE_SHORT);
