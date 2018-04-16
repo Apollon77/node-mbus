@@ -177,7 +177,10 @@ When you try to read data while communication is in progress your callback is ca
 
 ## Changelog
 
-### v0.5.x (2018.03.26)
+### v0.5.1 (2018.04.16)
+* fix secondary scan
+
+### v0.5.0 (2018.03.26)
 * add method to set a new Primary ID for a device
 
 ### v0.4.x (2018.03.25)
