@@ -596,7 +596,7 @@ public:
     // It is not safe to access V8, or V8 data structures
     // here, so everything we need for input and output
     // should go on `this`.
-    void ScanSecondaryWorker::Execute () {
+    void Execute () {
         uv_rwlock_wrlock(lock);
 
         mbus_frame *frame = NULL, reply;
@@ -648,7 +648,7 @@ public:
     // Executed when the async work is complete
     // this function will be run inside the main event loop
     // so it is safe to use V8 again
-    void ScanSecondaryWorker::HandleOKCallback () {
+    void HandleOKCallback () {
         Nan::HandleScope scope;
 
         *communicationInProgress = false;
@@ -661,7 +661,7 @@ public:
         callback->Call(2, argv);
     };
 
-    void ScanSecondaryWorker::HandleErrorCallback () {
+    void HandleErrorCallback () {
         Nan::HandleScope scope;
 
         *communicationInProgress = false;
