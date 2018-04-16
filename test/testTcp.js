@@ -46,7 +46,7 @@ describe('Native libmbus node-module TCP test ...', function() {
 
                 if (hexData.substring(0,4) === '1040') {
                     var device = hexData.substring(4,6);
-                    console.log(new Date().toString() + ':     mbus-Serial-Device: Initialization Request ' + device);
+                    console.log(new Date().toString() + ':     mbus-TCP-Device: Initialization Request ' + device);
                     if (device === "fe" || device === "01" || device === "05") {
                         sendBuf = Buffer.from('E5', 'hex');
                         sendMessage(socket, sendBuf);
@@ -70,17 +70,17 @@ describe('Native libmbus node-module TCP test ...', function() {
                     sendMessage(socket, sendBuf);
                 }
                 else if (hexData.substring(0, 23) === '680b0b6873fd52ffffff1ff') {
-                    console.log(new Date().toString() + ':     mbus-Serial-Device: Secondary Scan found');
+                    console.log(new Date().toString() + ':     mbus-TCP-Device: Secondary Scan found');
                     sendBuf = Buffer.from('E5', 'hex');
                     sendMessage(socket, sendBuf);
                 }
                 else if (hexData.substring(0, 6) === '105bfd') {
-                    console.log(new Date().toString() + ':     mbus-Serial-Device: Request for Class 2 Data ID FD');
+                    console.log(new Date().toString() + ':     mbus-TCP-Device: Request for Class 2 Data ID FD');
                     sendBuf = Buffer.from('6815156808017220438317b40901072b0000000c13180000009f16', 'hex');
                     sendMessage(socket, sendBuf);
                 }
                 else if (hexData.substring(0, 20) === '68060668530151017a03') {
-                    console.log(new Date().toString() + ':     mbus-Serial-Device: Request for ID Change 1 -> 3');
+                    console.log(new Date().toString() + ':     mbus-TCP-Device: Request for ID Change 1 -> 3');
                     sendBuf = Buffer.from('E5', 'hex');
                     sendMessage(socket, sendBuf);
                 }
@@ -136,7 +136,7 @@ describe('Native libmbus node-module TCP test ...', function() {
                         expect(mbusMaster.mbusMaster.communicationInProgress).to.be.false;
 
                         mbusMaster.setPrimaryId(1, 3, function(err) {
-                            console.log(new Date().toString() + ': mbus-Serial-Master err: ' + err);
+                            console.log(new Date().toString() + ': mbus-TCP-Master err: ' + err);
                             expect(err).to.be.null;
                             expect(mbusMaster.mbusMaster.communicationInProgress).to.be.false;
 
