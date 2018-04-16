@@ -538,14 +538,14 @@ NAN_METHOD(MbusMaster::Get) {
     info.GetReturnValue().SetUndefined();
 }
 
-class ScanSecondaryWorker : public Nan::AsyncWorker {
-public:
+//class ScanSecondaryWorker : public Nan::AsyncWorker {
+//public:
     ScanSecondaryWorker(Nan::Callback *callback,uv_rwlock_t *lock, mbus_handle *handle, bool *communicationInProgress)
     : Nan::AsyncWorker(callback), lock(lock), handle(handle), communicationInProgress(communicationInProgress) {}
     ~ScanSecondaryWorker() {
     }
 
-    void DeviceFound(mbus_handle *handle, mbus_frame *frame)
+    void ScanSecondaryWorker::DeviceFound(mbus_handle *handle, mbus_frame *frame)
 	{
 		char buffer[22], matching_addr[17];
         char *addr = mbus_frame_get_secondary_address(frame);
@@ -563,7 +563,7 @@ public:
     // It is not safe to access V8, or V8 data structures
     // here, so everything we need for input and output
     // should go on `this`.
-    void Execute () {
+    void ScanSecondaryWorker::Execute () {
         uv_rwlock_wrlock(lock);
 
         mbus_frame *frame = NULL, reply;
@@ -614,7 +614,7 @@ public:
     // Executed when the async work is complete
     // this function will be run inside the main event loop
     // so it is safe to use V8 again
-    void HandleOKCallback () {
+    void ScanSecondaryWorker::HandleOKCallback () {
         Nan::HandleScope scope;
 
         *communicationInProgress = false;
@@ -627,7 +627,7 @@ public:
         callback->Call(2, argv);
     };
 
-    void HandleErrorCallback () {
+    void ScanSecondaryWorker::HandleErrorCallback () {
         Nan::HandleScope scope;
 
         *communicationInProgress = false;
@@ -637,12 +637,6 @@ public:
         };
         callback->Call(1, argv);
     }
-private:
-    char *data;
-    uv_rwlock_t *lock;
-    mbus_handle *handle;
-    bool *communicationInProgress;
-};
 
 NAN_METHOD(MbusMaster::ScanSecondary) {
     Nan::HandleScope scope;
