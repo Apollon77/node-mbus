@@ -19,9 +19,14 @@ Nan::Persistent<v8::FunctionTemplate> MbusMaster::constructor;
 class ScanSecondaryDatastore
 {
 public:
-	ScanSecondaryDatastore(char *data)
-		:	data(data)
+	ScanSecondaryDatastore()
 	{
+        data = strdup("[ ");
+	}
+
+    ~ScanSecondaryDatastore()
+	{
+        free(data);
 	}
 
 	void DeviceFound(mbus_handle *handle, mbus_frame *frame)
@@ -43,6 +48,13 @@ public:
         }
         MBUS_ERROR("%s: CALLED6.\n", __PRETTY_FUNCTION__);
 	}
+
+    char* getData() {
+        data[strlen(data) - 1] = ']';
+        data[strlen(data)] = '\0';
+
+        return strdup(data);
+    }
 private:
 	char *data;
 };
@@ -632,7 +644,7 @@ public:
 
         data = strdup("[ ");
 
-        ScanSecondaryDatastore datatore(&data);
+        ScanSecondaryDatastore datatore();
         mbus_register_found_event(handle, DeviceFoundMemberFunctionCallback(&datatore, &ScanSecondaryDatastore::DeviceFound));
 
 
@@ -646,8 +658,9 @@ public:
             uv_rwlock_wrunlock(lock);
             return;
         }
-        data[strlen(data) - 1] = ']';
-        data[strlen(data)] = '\0';
+        data = datatore.getData();
+        //data[strlen(data) - 1] = ']';
+        //data[strlen(data)] = '\0';
         uv_rwlock_wrunlock(lock);
     }
 
