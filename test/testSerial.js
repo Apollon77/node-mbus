@@ -79,19 +79,19 @@ describe('Native libmbus node-module Serial test ...', function() {
                     secondaryCase = "1f";
                     sendMessage(socket, sendBuf);
                 }
-                else if (hexData.substring(0, 23) === '680b0b6873fd52ffffff6fffffffff2a16') {
+                else if (hexData.substring(0, 23) === '680b0b6873fd52ffffff6ff') {
                     console.log(new Date().toString() + ':     mbus-Serial-Device: Secondary Scan found (6-Collision)');
                     sendBuf = Buffer.from('004400', 'hex');
                     secondaryCase = "6f";
                     sendMessage(socket, sendBuf);
                 }
-                else if (hexData.substring(0, 23) === '680b0b6873fd52ffffff62ffffffff2a16') {
+                else if (hexData.substring(0, 23) === '680b0b6873fd52ffffff62f') {
                     console.log(new Date().toString() + ':     mbus-Serial-Device: Secondary Scan found (62)');
                     sendBuf = Buffer.from('E5', 'hex');
                     secondaryCase = "62";
                     sendMessage(socket, sendBuf);
                 }
-                else if (hexData.substring(0, 23) === '680b0b6873fd52ffffff68ffffffff2a16') {
+                else if (hexData.substring(0, 23) === '680b0b6873fd52ffffff68f') {
                     console.log(new Date().toString() + ':     mbus-Serial-Device: Secondary Scan found (68)');
                     sendBuf = Buffer.from('E5', 'hex');
                     secondaryCase = "68";
