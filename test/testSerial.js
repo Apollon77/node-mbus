@@ -177,7 +177,7 @@ describe('Native libmbus node-module Serial test ...', function() {
                     testSocket.destroy();
                     server.close();
                     done();
-                }, 20000); // Killswitch!
+                }, 30000); // Killswitch!
                 expect(mbusMaster.mbusMaster.connected).to.be.true;
                 expect(mbusMaster.mbusMaster.communicationInProgress).to.be.false;
                 setTimeout(function() {

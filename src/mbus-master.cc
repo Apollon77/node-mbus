@@ -432,7 +432,7 @@ public:
     {
         int i, i_start, i_end, probe_ret;
         char *mask, matching_mask[17];
-        char buffer[22], matching_addr[17];
+        char buffer[22];
 
         if (handle == NULL || addr_mask == NULL)
         {
@@ -561,7 +561,7 @@ public:
 
         if (ret == -1)
         {
-            sprintf(error,"Failed to probe secondary address", mask);
+            sprintf(error,"Failed to probe secondary address %s", mask);
             SetErrorMessage(error);
             free(data);
             uv_rwlock_wrunlock(lock);
