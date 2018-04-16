@@ -424,8 +424,9 @@ public:
     ~ScanSecondaryWorker() {
     }
 
-    void deviceFound(mbus_handle *handle, mbus_frame *frame) {
-        char buffer[22], matching_addr[17];
+    void DeviceFound(mbus_handle *handle, mbus_frame *frame)
+	{
+		char buffer[22], matching_addr[17];
         char *addr = mbus_frame_get_secondary_address(frame);
 
         snprintf(matching_addr, 17, "%s", addr);
@@ -435,7 +436,7 @@ public:
         if (data) {
             strcat(data,buffer);
         }
-    }
+	}
 
     // Executed inside the worker-thread.
     // It is not safe to access V8, or V8 data structures
@@ -450,7 +451,8 @@ public:
 
         strcpy(mask,"FFFFFFFFFFFFFFFF");
 
-        mbus_register_found_event(handle, &ScanSecondaryWorker::deviceFound);
+
+        mbus_register_found_event(handle, DeviceFoundMemberFunctionCallback(&this, &ScanSecondaryWorker::DeviceFound));
 
         memset((void *)&reply, 0, sizeof(mbus_frame));
 
@@ -743,4 +745,122 @@ NAN_GETTER(MbusMaster::HandleGetters) {
 }
 
 NAN_SETTER(MbusMaster::HandleSetters) {
+}
+
+
+
+
+
+
+
+typedef void (*LPFN_DeviceFoundCCallback)(mbus_handle *handle, mbus_frame *frame);
+typedef int (ScanSecondaryWorker::*LPFN_DeviceFoundMemberFunctionCallback)(mbus_handle *handle, mbus_frame *frame);
+
+// this object holds the state for a C++ member function callback in memory
+class DeviceFoundCallbackBase
+{
+public:
+	// input: pointer to a unique C callback.
+	DeviceFoundCallbackBase(LPFN_DeviceFoundCCallback pCCallback)
+		:	m_pClass( NULL ),
+			m_pMethod( NULL ),
+			m_pCCallback( pCCallback )
+	{
+	}
+
+	// when done, remove allocation of the callback
+	void Free()
+	{
+		m_pClass = NULL;
+		// not clearing m_pMethod: it won't be used, since m_pClass is NULL and so this entry is marked as free
+	}
+
+	// when free, allocate this callback
+	LPFN_DeviceFoundCCallback Reserve(ScanSecondaryWorker* instance, LPFN_DeviceFoundMemberFunctionCallback method)
+	{
+		if( m_pClass )
+			return NULL;
+
+		m_pClass = instance;
+		m_pMethod = method;
+		return m_pCCallback;
+	}
+
+protected:
+	static int StaticInvoke(int context, mbus_handle *handle, mbus_frame *frame);
+
+private:
+	LPFN_DeviceFoundCCallback m_pCCallback;
+	ScanSecondaryWorker* m_pClass;
+	LPFN_DeviceFoundMemberFunctionCallback m_pMethod;
+};
+
+template <int context> class DynamicDeviceFoundCallback : public DeviceFoundCallbackBase
+{
+public:
+	DynamicDeviceFoundCallback()
+		:	DeviceFoundCallbackBase(&DynamicDeviceFoundCallback<context>::GeneratedStaticFunction)
+	{
+	}
+
+private:
+	static int GeneratedStaticFunction(mbus_handle *handle, mbus_frame *frame)
+	{
+		return StaticInvoke(context, handle, frame);
+	}
+};
+
+class DeviceFoundMemberFunctionCallback
+{
+public:
+	DeviceFoundMemberFunctionCallback(ScanSecondaryWorker* instance, LPFN_DeviceFoundMemberFunctionCallback method);
+	~DeviceFoundMemberFunctionCallback();
+
+public:
+	operator LPFN_DeviceFoundCCallback() const
+	{
+		return m_cbCallback;
+	}
+
+	bool IsValid() const
+	{
+		return m_cbCallback != NULL;
+	}
+
+private:
+	LPFN_DeviceFoundCCallback m_cbCallback;
+	int m_nAllocIndex;
+
+private:
+	DeviceFoundMemberFunctionCallback( const DeviceFoundMemberFunctionCallback& os );
+	DeviceFoundMemberFunctionCallback& operator=( const DeviceFoundMemberFunctionCallback& os );
+};
+
+static DeviceFoundCallbackBase* AvailableCallbackSlots[] = {
+	new DynamicDeviceFoundCallback<0x00>()
+};
+
+int DeviceFoundCallbackBase::StaticInvoke(int context, mbus_handle *handle, mbus_frame *frame)
+{
+	return ((AvailableCallbackSlots[context]->m_pClass)->*(AvailableCallbackSlots[context]->m_pMethod))(handle, frame);
+}
+
+
+DeviceFoundMemberFunctionCallback::DeviceFoundMemberFunctionCallback(ScanSecondaryWorker* instance, LPFN_DeviceFoundMemberFunctionCallback method)
+{
+	int imax = sizeof(AvailableCallbackSlots)/sizeof(AvailableCallbackSlots[0]);
+	for( m_nAllocIndex = 0; m_nAllocIndex < imax; ++m_nAllocIndex )
+	{
+		m_cbCallback = AvailableCallbackSlots[m_nAllocIndex]->Reserve(instance, method);
+		if( m_cbCallback != NULL )
+			break;
+	}
+}
+
+DeviceFoundMemberFunctionCallback::~DeviceFoundMemberFunctionCallback()
+{
+	if( IsValid() )
+	{
+		AvailableCallbackSlots[m_nAllocIndex]->Free();
+	}
 }
