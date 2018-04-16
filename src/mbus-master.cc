@@ -49,7 +49,7 @@ public:
         MBUS_ERROR("%s: CALLED6.\n", __PRETTY_FUNCTION__);
 	}
 
-    char* getData() {
+    char* GetData() {
         data[strlen(data) - 1] = ']';
         data[strlen(data)] = '\0';
 
@@ -642,10 +642,10 @@ public:
             return;
         }
 
-        data = strdup("[ ");
+        //data = strdup("[ ");
 
-        ScanSecondaryDatastore datatore();
-        mbus_register_found_event(handle, DeviceFoundMemberFunctionCallback(&datatore, &ScanSecondaryDatastore::DeviceFound));
+        ScanSecondaryDatastore datastore();
+        mbus_register_found_event(handle, DeviceFoundMemberFunctionCallback(datastore, &ScanSecondaryDatastore::DeviceFound));
 
 
         int ret = mbus_scan_2nd_address_range(handle, 0, mask);
@@ -658,7 +658,7 @@ public:
             uv_rwlock_wrunlock(lock);
             return;
         }
-        data = datatore.getData();
+        data = datastore.GetData();
         //data[strlen(data) - 1] = ']';
         //data[strlen(data)] = '\0';
         uv_rwlock_wrunlock(lock);
