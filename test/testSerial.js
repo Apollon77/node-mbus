@@ -98,7 +98,7 @@ describe('Native libmbus node-module Serial test ...', function() {
                     sendMessage(socket, sendBuf);
                 }
                 else if (hexData.substring(0, 6) === '105bfd') {
-                    console.log(new Date().toString() + ':     mbus-Serial-Device: Request for Class 2 Data ID FD');
+                    console.log(new Date().toString() + ':     mbus-Serial-Device: Request for Class 2 Data ID FD - ' + secondaryCase);
                     if (secondaryCase === "62") {
                         sendBuf = Buffer.from('681010680800725316006296150331170000000f4a16', 'hex');
                     }
