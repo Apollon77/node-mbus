@@ -540,9 +540,9 @@ NAN_METHOD(MbusMaster::Get) {
 
 //class ScanSecondaryWorker : public Nan::AsyncWorker {
 //public:
-    ScanSecondaryWorker(Nan::Callback *callback,uv_rwlock_t *lock, mbus_handle *handle, bool *communicationInProgress)
+    ScanSecondaryWorker::ScanSecondaryWorker(Nan::Callback *callback,uv_rwlock_t *lock, mbus_handle *handle, bool *communicationInProgress)
     : Nan::AsyncWorker(callback), lock(lock), handle(handle), communicationInProgress(communicationInProgress) {}
-    ~ScanSecondaryWorker() {
+    ~ScanSecondaryWorker::ScanSecondaryWorker() {
     }
 
     void ScanSecondaryWorker::DeviceFound(mbus_handle *handle, mbus_frame *frame)
