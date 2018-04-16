@@ -30,6 +30,7 @@ describe('Native libmbus node-module Serial test ...', function() {
         this.timeout(300000); // because of first install from npm
 
         var testSocket;
+        var secondaryCase = "";
         var server = net.createServer(function(socket) {
             console.log(new Date().toString() + ': mbus-Serial-Device: Connected ' + port + '!');
 
@@ -47,7 +48,6 @@ describe('Native libmbus node-module Serial test ...', function() {
                 var hexData = data.toString('hex');
                 console.log(new Date().toString() + ': mbus-Serial-Device: Received from Master: ' + hexData);
 
-                var secondaryCase = "";
                 if (hexData.substring(0,4) === '1040') {
                     var device = hexData.substring(4,6);
                     console.log(new Date().toString() + ':     mbus-Serial-Device: Initialization Request ' + device);
