@@ -658,7 +658,7 @@ public:
             uv_rwlock_wrunlock(lock);
             return;
         }
-        data = datastore.GetData();
+        data = datastore->GetData();
         //data[strlen(data) - 1] = ']';
         //data[strlen(data)] = '\0';
         uv_rwlock_wrunlock(lock);
