@@ -632,7 +632,7 @@ public:
 
         data = strdup("[ ");
 
-        ScanSecondaryDatastore datatore(data);
+        ScanSecondaryDatastore datatore(&data);
         mbus_register_found_event(handle, DeviceFoundMemberFunctionCallback(&datatore, &ScanSecondaryDatastore::DeviceFound));
 
 
