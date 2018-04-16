@@ -424,17 +424,103 @@ public:
     ~ScanSecondaryWorker() {
     }
 
-    void deviceFound(mbus_handle *handle, mbus_frame *frame) {
+    //------------------------------------------------------------------------------
+    // Iterate over all address masks according to the M-Bus probe algorithm.
+    //------------------------------------------------------------------------------
+    int
+    Scan2ndAddressRange(mbus_handle * handle, int pos, char *addr_mask)
+    {
+        int i, i_start, i_end, probe_ret;
+        char *mask, matching_mask[17];
         char buffer[22], matching_addr[17];
-        char *addr = mbus_frame_get_secondary_address(frame);
 
-        snprintf(matching_addr, 17, "%s", addr);
-
-        sprintf(buffer,"\"%s\",",matching_addr);
-        data = (char*)realloc(data, strlen(data) + strlen(buffer) + 2*sizeof(char));
-        if (data) {
-            strcat(data,buffer);
+        if (handle == NULL || addr_mask == NULL)
+        {
+            MBUS_ERROR("%s: Invalid handle or address mask.\n", __PRETTY_FUNCTION__);
+            return -1;
         }
+
+        if (strlen(addr_mask) != 16)
+        {
+            MBUS_ERROR("%s: Illegal address mask [%s]. Not 16 characters long.\n", __PRETTY_FUNCTION__, addr_mask);
+            return -1;
+        }
+
+        if (pos < 0 || pos >= 16)
+        {
+            return 0;
+        }
+
+        if ((mask = strdup(addr_mask)) == NULL)
+        {
+            MBUS_ERROR("%s: Failed to allocate local copy of the address mask.\n", __PRETTY_FUNCTION__);
+            return -1;
+        }
+
+        if (mask[pos] == 'f' || mask[pos] == 'F')
+        {
+            // mask[pos] is a wildcard -> enumerate all 0..9 at this position
+            i_start = 0;
+            i_end   = 9;
+        }
+        else
+        {
+            if (pos < 15)
+            {
+                // mask[pos] is not a wildcard -> don't iterate, recursively check pos+1
+                Scan2ndAddressRange(handle, pos+1, mask);
+            }
+            else
+            {
+                // .. except if we're at the last pos (==15) and this isn't a wildcard we still need to send the probe
+                i_start = (int)(mask[pos] - '0');
+                i_end   = (int)(mask[pos] - '0');
+            }
+        }
+
+        // skip the scanning if we're returning from the (pos < 15) case above
+        if (mask[pos] == 'f' || mask[pos] == 'F' || pos == 15)
+        {
+            for (i = i_start; i <= i_end; i++)
+            {
+                mask[pos] = '0'+i;
+
+                if (handle->scan_progress)
+                    handle->scan_progress(handle,mask);
+
+                probe_ret = mbus_probe_secondary_address(handle, mask, matching_mask);
+
+                if (probe_ret == MBUS_PROBE_SINGLE)
+                {
+                    if (!handle->found_event)
+                    {
+                        printf("Found a device on secondary address %s [using address mask %s]\n", matching_mask, mask);
+                        sprintf(buffer,"\"%s\",",matching_mask);
+                        data = (char*)realloc(data, strlen(data) + strlen(buffer) + 2*sizeof(char));
+                        if (data) {
+                            strcat(data,buffer);
+                        }
+                    }
+                }
+                else if (probe_ret == MBUS_PROBE_COLLISION)
+                {
+                    // collision, more than one device matching, restrict the search mask further
+                    Scan2ndAddressRange(handle, pos+1, mask);
+                }
+                else if (probe_ret == MBUS_PROBE_NOTHING)
+                {
+                     // nothing... move on to next address mask
+                }
+                else // MBUS_PROBE_ERROR
+                {
+                    MBUS_ERROR("%s: Failed to probe secondary address [%s].\n", __PRETTY_FUNCTION__, mask);
+                    return -1;
+                }
+            }
+        }
+
+        free(mask);
+        return 0;
     }
 
     // Executed inside the worker-thread.
@@ -473,7 +559,7 @@ public:
 
         data = strdup("[ ");
 
-        int ret = mbus_scan_2nd_address_range(handle, 0, mask);
+        int ret = Scan2ndAddressRange(handle, 0, mask);
 
         if (ret == -1)
         {
