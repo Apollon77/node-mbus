@@ -39,6 +39,6 @@
     "@alcalzone/release-script-plugin-license": "^3.7.0",
     "mocha": "^10.4.0",
     "chai": "^4.4.1",
-    "nyc": "^15.1.0"
+    "nyc": "^17.0.0"
   }
 }
