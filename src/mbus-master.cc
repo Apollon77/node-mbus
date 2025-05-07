@@ -74,8 +74,8 @@ NAN_METHOD(MbusMaster::New) {
 
     // Invoked as constructor: `new MbusMaster(...)`
     MbusMaster* obj = new MbusMaster();
-
-    Nan::NanReturnHolder();
+    obj->Wrap(info.Holder());
+    info.GetReturnValue().Set(info.Holder());
 }
 
 NAN_METHOD(MbusMaster::OpenTCP) {
