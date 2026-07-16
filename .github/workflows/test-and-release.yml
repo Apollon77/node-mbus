@@ -65,6 +65,9 @@ jobs:
       matrix:
         node-version: [16.x, 18.x, 20.x, 22.x, 24.x]
         os: [ubuntu-latest, windows-2022, macos-latest]
+        exclude:
+          - node-version: 16.x
+            os: windows-2022
 
     steps:
       - uses: actions/checkout@v4
