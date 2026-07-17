@@ -68,6 +68,8 @@ jobs:
         exclude:
           - node-version: 16.x
             os: windows-2022
+          - node-version: 26.x
+            os: windows-2022
 
     steps:
       - uses: actions/checkout@v4
