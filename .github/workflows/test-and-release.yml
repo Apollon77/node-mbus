@@ -127,7 +127,7 @@ jobs:
           Get-NetIPAddress -AddressFamily IPV6     
 
       - name: Install Dependencies (Windows)
-        if: startsWith(runner.OS, 'Windows')
+        if: runner.os == 'Windows'
         env:
           GYP_DEFINES: enable_lto=false enable_thin_lto=false lto_jobs=
         run: npm ci
