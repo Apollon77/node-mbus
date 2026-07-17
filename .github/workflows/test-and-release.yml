@@ -68,8 +68,6 @@ jobs:
         exclude:
           - node-version: 16.x
             os: windows-2022
-          - node-version: 26.x
-            os: windows-2022
 
     steps:
       - uses: actions/checkout@v4
@@ -128,7 +126,14 @@ jobs:
         run: |
           Get-NetIPAddress -AddressFamily IPV6     
 
+      - name: Install Dependencies (Windows)
+        if: startsWith(runner.OS, 'Windows')
+        env:
+          GYP_DEFINES: enable_lto=false enable_thin_lto=false lto_jobs=
+        run: npm ci
+
       - name: Install Dependencies
+        if: startsWith(runner.OS, 'Windows') == false
         run: npm ci
 
       - name: Run local tests
