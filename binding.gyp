@@ -19,7 +19,7 @@
                         'AdditionalOptions!': [
                             '-flto=full',
                             '-flto=thin',
-                            '/opt:lldltojobs=<(lto_jobs)'
+                            '/opt:lldltojobs=2'
                         ]
                     }
                 }
