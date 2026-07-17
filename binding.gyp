@@ -1,4 +1,31 @@
 {
+    'target_defaults': {
+        'conditions': [
+            ['OS=="win"', {
+                'msvs_settings': {
+                    'VCCLCompilerTool': {
+                        'AdditionalOptions!': [
+                            '-flto=full',
+                            '-flto=thin'
+                        ]
+                    },
+                    'VCLibrarianTool': {
+                        'AdditionalOptions!': [
+                            '-flto=full',
+                            '-flto=thin'
+                        ]
+                    },
+                    'VCLinkerTool': {
+                        'AdditionalOptions!': [
+                            '-flto=full',
+                            '-flto=thin',
+                            '/opt:lldltojobs=2'
+                        ]
+                    }
+                }
+            }]
+        ]
+    },
 	'targets': [
 		{
 			'target_name': 'mbus',

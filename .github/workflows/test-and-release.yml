@@ -63,8 +63,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x, 22.x, 24.x]
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [16.x, 18.x, 20.x, 22.x, 24.x, 26.x]
+        os: [ubuntu-latest, windows-2022, macos-latest]
+        exclude:
+          - node-version: 16.x
+            os: windows-2022
 
     steps:
       - uses: actions/checkout@v4
@@ -93,8 +96,14 @@ jobs:
         run: |
           $wc = New-Object System.Net.WebClient
           $wc.DownloadFile("https://github.com/Apollon77/SupportingFiles/raw/master/appveyor/serial/com0com.cer", "com0com.cer")
-          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/CertMgr.exe' /add com0com.cer /s /r localMachine root
-          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/CertMgr.exe' /add com0com.cer /s /r localMachine trustedpublisher
+          $certMgr = Get-ChildItem 'C:/Program Files (x86)/Windows Kits/10/bin' -Filter CertMgr.exe -Recurse -ErrorAction SilentlyContinue |
+            Sort-Object FullName -Descending |
+            Select-Object -First 1 -ExpandProperty FullName
+          if (-not $certMgr) {
+            throw "CertMgr.exe was not found under Windows Kits path."
+          }
+          & $certMgr /add com0com.cer /s /r localMachine root
+          & $certMgr /add com0com.cer /s /r localMachine trustedpublisher
           $wc.DownloadFile("https://github.com/Apollon77/SupportingFiles/raw/master/appveyor/serial/setup_com0com_W7_x64_signed.exe", "setup_com0com_W7_x64_signed.exe")
           $env:CNC_INSTALL_CNCA0_CNCB0_PORTS="YES"
           .\setup_com0com_W7_x64_signed.exe /S
@@ -117,7 +126,14 @@ jobs:
         run: |
           Get-NetIPAddress -AddressFamily IPV6     
 
+      - name: Install Dependencies (Windows)
+        if: runner.os == 'Windows'
+        env:
+          GYP_DEFINES: enable_lto=false enable_thin_lto=false lto_jobs=
+        run: npm ci
+
       - name: Install Dependencies
+        if: runner.os != 'Windows'
         run: npm ci
 
       - name: Run local tests
